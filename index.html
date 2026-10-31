@@ -54,6 +54,13 @@ td.r,th.r{text-align:right;white-space:nowrap}
 .box{background:var(--chip);border-radius:10px;padding:8px 10px;margin:6px 0}
 .tel a{font-weight:700}
 .route{margin-top:8px;font-size:13px;background:rgba(255,255,255,.15);border-radius:10px;padding:6px 9px}
+.tl li>span{min-width:0}
+.fig{margin:6px 0 2px}
+.fig img{display:block;width:100%;height:auto;border-radius:12px;background:var(--chip);border:1px solid var(--bd)}
+.fig figcaption{font-size:12px;color:var(--mu);margin-top:3px;line-height:1.35}
+.fig.sm{max-width:240px}
+.fig figcaption a{color:var(--mu)}
+.cr li{font-size:12.5px;margin:4px 0}
 footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 </style>
 </head>
@@ -61,11 +68,11 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 <header>
  <div class="top">
   <svg class="flag" viewBox="0 0 30 20" aria-label="ธงญี่ปุ่น"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#BC002D"/></svg>
-  <span class="ver" id="verLbl">v2.0 · 31 ต.ค. 2026</span>
+  <span class="ver" id="verLbl">v2.1 · 31 ต.ค. 2026</span>
   <button id="modeBtn" aria-label="สลับโหมดมืด">🌓</button>
  </div>
  <h1>ญี่ปุ่น 7 วัน 6 คืน: <span>นาโกย่า ·</span> <span>ทาคายามะ ·</span> <span>ชิราคาวะโกะ ·</span> <span>คานาซาวะ</span></h1>
- <p>📅 ศ. 9 – พฤ. 15 เม.ย. 2027 · ✈️ การบินไทย บินตรง BKK ⇄ NGO</p>
+ <p>📅 ศ. 9 – พฤ. 15 เม.ย. 2027 (ออกจากบ้าน พฤ. 8 เม.ย. ค่ำ) · ✈️ TG 644 / TG 645 บินตรง BKK ⇄ NGO</p>
  <p>กลุ่ม 18 คน (เด็ก ผู้ใหญ่ ผู้สูงอายุ) · เดินน้อย · ไม่รีบ</p>
  <div class="route">🏨 นาโกย่า 1 คืน → ทาคายามะ 2 คืน → คานาซาวะ 2 คืน → โรงแรมสนามบิน 1 คืน</div>
 </header>
@@ -75,106 +82,114 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 <script>
 (function(){
 "use strict";
-var VER="v2.0";
+var VER="v2.1";
 var FX=0.214348; // 1 JPY = THB, open.er-api.com 31 ต.ค. 2026 07:02 (เวลาไทย)
 var M=function(q){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);};
 var C='<span class="chk">เช็กก่อนไป</span>';
 function P(name,q){return '📍 <a href="'+M(q||name)+'" target="_blank" rel="noopener">'+name+'</a>';}
+var IMG={"nagoya-castle": [800, 533, "ปราสาทนาโกย่า (天守閣)", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Main_Tower_Keep_in_Meijo_Park,_Hommaru_Naka_Ward_Nagoya_2022.jpg", "Tomio344456", "CC BY-SA 4.0", "https://creativecommons.org/licenses/by-sa/4.0"], "nakabashi": [800, 533, "สะพานแดง Nakabashi ทาคายามะ", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Nakabashi_Bridge,_Hon-machi_Takayama_2015.jpg", "Tomio344456", "CC BY-SA 4.0", "https://creativecommons.org/licenses/by-sa/4.0"], "miyagawa": [800, 600, "ตลาดเช้า Miyagawa", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Hida-Takayama_Miyagawa_Morning_Market_(15668520238).jpg", "bryan... from Taipei, Taiwan", "CC BY-SA 2.0", "https://creativecommons.org/licenses/by-sa/2.0"], "jinya": [800, 533, "Takayama Jinya", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:2024-10-27_Takayama_Jinya.jpg", "Alexkom000", "CC BY 4.0", "https://creativecommons.org/licenses/by/4.0"], "sanmachi": [800, 536, "ถนนเมืองเก่า Sanmachi", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Sanmachi_Takayama02ds3872.jpg", "663highland", "CC BY 2.5", "https://creativecommons.org/licenses/by/2.5"], "yatai": [800, 533, "รถแห่ในหอ Yatai Kaikan", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Interior_-_Takayama_Festival_Float_Exhibition_Hall_-_Takayama,_Gifu,_Japan_-_DSC06591.jpg", "Daderot", "CC0", "https://creativecommons.org/publicdomain/zero/1.0/deed.en"], "shiroyama": [800, 533, "วิวชิราคาวะโกะจากจุดชมวิว Shiroyama", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Shirakawa-go_from_Shiroyama.JPG", "Alpsdake", "CC BY-SA 3.0", "https://creativecommons.org/licenses/by-sa/3.0"], "wada": [800, 450, "Wada House ชิราคาวะโกะ", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Wada_House_(Shirakawa_Village,_Gifu_Prefecture)_01.jpg", "小石川人晃", "CC BY-SA 4.0", "https://creativecommons.org/licenses/by-sa/4.0"], "kenrokuen": [800, 600, "โคมหิน Kotoji สวน Kenrokuen (ภาพฤดูใบไม้ร่วง)", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Kenrokuen_linterna_fall.JPG", "Daderot at English Wikipedia", "CC BY-SA 3.0", "https://creativecommons.org/licenses/by-sa/3.0/"], "kanazawa-castle": [800, 533, "ประตู Ishikawa-mon ปราสาทคานาซาวะ", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:2024-10-26_Kanazawa_Castle,_Ishikawa-mon.jpg", "Alexkom000", "CC BY 4.0", "https://creativecommons.org/licenses/by/4.0"], "omicho": [800, 532, "ทางเข้าตลาด Omicho", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Omicho_covered_market_western_entrance,_Kanazawa,_2016.jpg", "DimiTalen", "CC0", "https://creativecommons.org/publicdomain/zero/1.0/deed.en"], "higashi-chaya": [800, 533, "ย่าน Higashi Chaya", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Higashi_Chaya_district,_Kanazawa_(3810704024).jpg", "Andrea Schaffer from Sydney, Australia", "CC BY 2.0", "https://creativecommons.org/licenses/by/2.0"], "flight-of-dreams": [800, 533, "อาคาร Flight of Dreams สนามบิน Centrair", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:FLIGHT_OF_DREAMS1.jpg", "Bariston", "CC BY-SA 4.0", "https://creativecommons.org/licenses/by-sa/4.0"], "esca": [800, 600, "ใต้ดิน Esca สถานีนาโกย่า", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:ESCA_Shopping_Avenue.JPG", "ARICA13", "CC BY-SA 3.0", "https://creativecommons.org/licenses/by-sa/3.0"], "hyakubangai": [800, 600, "Kanazawa Hyakubangai (Anto) ในสถานี", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Anto_100bangai_Kanazawa.jpg", "Rebirth10", "CC BY-SA 4.0", "https://creativecommons.org/licenses/by-sa/4.0"], "hida-folk": [800, 533, "Hida Folk Village (ภาพฤดูใบไม้ร่วง)", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Hida_Folk_Village_-_HidaFolkVillage6459.jpg", "lumoplank", "CC0", "https://creativecommons.org/publicdomain/zero/1.0/deed.en"], "museum21": [800, 533, "พิพิธภัณฑ์ 21st Century คานาซาวะ", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:21st_Century_Museum_of_Contemporary_Art,_Kanazawa011.jpg", "金沢市", "CC BY 2.1 jp", "https://creativecommons.org/licenses/by/2.1/jp/deed.en"], "nagamachi": [800, 533, "ย่านซามูไร Nagamachi", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Street_-_Nagamachi_-_Kanazawa,_Japan_-_DSC00307.jpg", "Daderot", "CC0", "https://creativecommons.org/publicdomain/zero/1.0/deed.en"], "aeon-tokoname": [800, 600, "Aeon Mall Tokoname (มองจากสถานี Rinku Tokoname)", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Aeonmall-Tokoname-rinnkuustation.JPG", "Renaik", "CC BY-SA 4.0", "https://creativecommons.org/licenses/by-sa/4.0"], "yabaton-esca": [800, 600, "ร้าน Yabaton สาขา Esca", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Yabaton-ESCA.jpg", "HQA02330", "CC BY-SA 4.0", "https://creativecommons.org/licenses/by-sa/4.0"], "yamamotoya-esca": [800, 600, "ร้าน Yamamotoya Honten สาขา Esca", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Yamamotoya-Honten-ESCA.jpg", "HQA02330", "CC BY-SA 4.0", "https://creativecommons.org/licenses/by-sa/4.0"], "furaibo-dish": [800, 600, "ภาพอาหาร: ปีกไก่ทอด Furaibo (ไม่ใช่รูปสาขา Esca)", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Furaibo_Tebasaki.JPG", "Nissy-KITAQ", "CC BY-SA 3.0", "https://creativecommons.org/licenses/by-sa/3.0"], "kyoya-dish": [800, 600, "ภาพอาหาร: เนื้อฮิดะย่างบนใบโฮบะมิโซะ (ไม่ใช่รูปร้าน Kyoya)", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Hida_beef_with_Hoba-miso.jpg", "Gofukuji", "CC0", "https://creativecommons.org/publicdomain/zero/1.0/deed.en"], "yabaton-centrair": [800, 414, "ร้าน Yabaton สาขาสนามบิน Centrair", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Yaba-ton_is_the_Misokatsu_restran_,_%E7%9F%A2%E5%A0%B4%E3%81%A8%E3%82%93_%E3%82%BB%E3%83%B3%E3%83%88%E3%83%AC%E3%82%A2%E5%BA%97_-_panoramio.jpg", "z tanuki", "CC BY 3.0", "https://creativecommons.org/licenses/by/3.0"], "hitsumabushi-dish": [800, 600, "ภาพอาหาร: ฮิตสึมาบุชิ (ไม่ใช่รูปร้าน Maruya Honten)", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Hitsumabushi1.jpg", "Kanesue", "CC BY 2.0", "https://creativecommons.org/licenses/by/2.0"], "takayama-ramen-dish": [800, 596, "ภาพอาหาร: ราเมงทาคายามะ (ร้าน Kikyoya · ตัวอย่างเมนู)", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/File:Takayama_ramen_001.jpg", "Ocdp", "CC0", "https://creativecommons.org/publicdomain/zero/1.0/deed.en"], "gyusuke": [800, 607, "ร้าน GYU-SUKE ทาคายามะ", "GYU-SUKE (เว็บไซต์ทางการ)", "https://gyu-suke.com/", "เจ้าของร้าน/ผู้จัดทำเว็บไซต์", "© สงวนสิทธิ์ ใช้เพื่ออ้างอิงร้าน", ""], "irori": [800, 534, "ร้าน Irori ชิราคาวะโกะ", "Irori (เว็บไซต์ทางการ)", "https://www.shirakawagou.jp/", "เจ้าของร้าน/ผู้จัดทำเว็บไซต์", "© สงวนสิทธิ์ ใช้เพื่ออ้างอิงร้าน", ""], "maimon": [406, 270, "Maimon Sushi สาขาสถานีคานาซาวะ", "Kanazawa Maimon Sushi (เว็บไซต์ทางการ)", "https://www.maimon-susi.com/shop/kanazawaeki/", "เจ้าของร้าน/ผู้จัดทำเว็บไซต์", "© สงวนสิทธิ์ ใช้เพื่ออ้างอิงร้าน", ""], "shiraogi": [800, 512, "ร้าน Shiraogi ชิราคาวะโกะ", "สมาคมท่องเที่ยวชิราคาวะโกะ", "https://www.shirakawa-go.gr.jp/shop/31/", "เจ้าของร้าน/ผู้จัดทำเว็บไซต์", "© สงวนสิทธิ์ ใช้เพื่ออ้างอิงร้าน", ""]};
+function F(k,sm){var i=IMG[k];if(!i)return "";return '<figure class="fig'+(sm?' sm':'')+'"><img src="images/'+k+'.webp" width="'+i[0]+'" height="'+i[1]+'" loading="lazy" decoding="async" alt="'+i[2]+'"><figcaption>'+i[2]+' · <a href="'+i[4]+'" target="_blank" rel="noopener">'+(i[3]==="Wikimedia Commons"?i[5]+" / "+i[6]:i[3])+'</a></figcaption></figure>';}
+function Fs(x,sm){if(!x)return "";return (typeof x==="string"?[x]:x).map(function(k){return F(k,sm);}).join("");}
 function yen(n){return "¥"+n.toLocaleString("en-US");}
 function thb(n){return "฿"+Math.round(n).toLocaleString("en-US");}
 
 /* ---------- days ---------- */
 var DAYS=[
-{id:"d1",title:"D1 · ศ. 9 เม.ย. · บินถึงนาโกย่า",theme:"บินกลางวัน ถึงค่ำ เข้าโรงแรมใกล้สถานีนาโกย่า",
+{id:"d1",title:"D1 · ศ. 9 เม.ย. · ถึงนาโกย่าเช้า (วันเบา ๆ)",theme:"บินกลางคืน ถึงเช้า · เที่ยวจุดเดียว เดินน้อย แล้วพักเร็ว",
  items:[
- ["11:00","✈️ TG (เลขไฟลต์รอยืนยัน) BKK 11:00 → "+P("สนามบิน Chubu Centrair (NGO)","Chubu Centrair International Airport")+" 18:55 (5 ชม.55)","กินมื้อกลางวันบนเครื่อง"],
- ["19:00","🛂 ตม. + รับกระเป๋า ~1 ชม. (18 คน เผื่อเวลา)",""],
- ["20:00","🚆 แผน B: Meitetsu μSKY → "+P("สถานี Meitetsu Nagoya","Meitetsu Nagoya Station")+" ~30 นาที (¥1,430)","🚌 แผน A: รถเหมามารับที่สนามบิน ส่งหน้าโรงแรม ~40 นาที (ค่ารถเที่ยวนี้ "+C+")"],
- ["20:45","🏨 เช็กอินโรงแรมย่านสถานีนาโกย่า",""],
- ["21:00","🍛 มื้อเบา ๆ ใน "+P("ใต้ดิน Esca (ฝั่งชินคันเซ็น)","Esca Underground Shopping Center Nagoya")+": "+P("Yabaton Esca (มิโซะคัตสึ)","Yabaton Nagoya Station Esca")+" 11:00–22:00 (สั่งสุดท้าย 21:30) · 49 ที่นั่ง","หรือ Yamamotoya Honten (อุด้งมิโซะ) สั่งสุดท้าย 21:30 · หรือซื้อจากร้านสะดวกซื้อ"]],
- cafe:"☕ คาเฟ่ในสนามบิน/สถานี (ถ้ายังหิว)",
- care:"👴 เดินน้อย: เลือกโรงแรมติดสถานี · 🧒 เด็กอาจง่วง กินเร็ว ๆ แล้วนอน · 🧳 แผน B ลากกระเป๋าแค่ช่วงสั้น",
- backup:["ถ้าดีเลย์/ช้า: กินในสนามบินก่อนขึ้นรถไฟ (ร้านส่วนใหญ่ปิด ~21:00) "+C],bq:[["Furaibo Esca (ปีกไก่)","Furaibo Esca Nagoya"],["Yamamotoya Honten Esca","Yamamotoya Honten Esca Nagoya"]]},
+ ["D0","🧳 <b>พฤ. 8 เม.ย. เย็น</b> ออกจากบ้านไป "+P("สุวรรณภูมิ (BKK)","Suvarnabhumi Airport")+" · เช็กอินกลุ่ม ~21:00 (เผื่อ 3 ชม.)","กินมื้อเย็นก่อนออกจากบ้าน · เสื้อกันหนาวใส่กระเป๋าถือ (เช้านาโกย่ายังหนาว)"],
+ ["00:05","✈️ <b>TG 644</b> BKK 00:05 → "+P("สนามบิน Chubu Centrair (NGO)","Chubu Centrair International Airport")+" 08:00 (ศ. 9 เม.ย.) · Boeing 787 · 5 ชม.55","⚠️ Google Flights แจ้งว่ามักดีเลย์ 30 นาทีขึ้นไป · นอนบนเครื่อง (ญี่ปุ่นเร็วกว่าไทย 2 ชม.)"],
+ ["08:00","🛂 ตม. + รับกระเป๋า ~1 ชม. (18 คน เผื่อเวลา)",""],
+ ["09:15","🚆 แผน B: Meitetsu μSKY → "+P("สถานี Meitetsu Nagoya","Meitetsu Nagoya Station")+" ~30 นาที (¥1,430)","🚌 แผน A: รถเหมามารับที่สนามบิน ส่งหน้าโรงแรม ~40 นาที (ค่ารถเที่ยวนี้ "+C+")"],
+ ["10:15","🏨 ฝากกระเป๋าที่โรงแรมย่านสถานีนาโกย่า · ขอเช็กอินก่อนเวลา (early check-in) ได้หรือไม่ อาจมีค่าใช้จ่ายเพิ่ม "+C,"ถ้ายังเข้าห้องไม่ได้ ผู้สูงอายุ/เด็กเล็กนั่งพักล็อบบี้หรือคาเฟ่ก่อน"],
+ ["11:00","🍛 ข้าวเที่ยงเร็วใน "+P("ใต้ดิน Esca (ฝั่งชินคันเซ็น)","Esca Underground Shopping Center Nagoya")+": "+P("Yabaton Esca (มิโซะคัตสึ)","Yabaton Nagoya Station Esca")+" 11:00–22:00 · 49 ที่นั่ง","ไปตอนร้านเพิ่งเปิด คิวน้อย · 18 คนอาจแบ่ง 2 รอบ","yabaton-esca"],
+ ["12:30","🏯 "+P("ปราสาทนาโกย่า","Nagoya Castle")+" (แท็กซี่จากสถานี) · 09:00–16:30 · ผู้ใหญ่ ¥1,000 (กลุ่ม 30 คนขึ้นไป ¥900) · ม.ต้นลงไปฟรี · ใช้เวลา ~1–1.5 ชม.","ตัวปราสาทหลัก (天守閣) ปิดเข้าด้านใน → ชมด้านนอก + Hommaru Palace (ถอดรองเท้า) · ทางเรียบกว้าง · 🌸 ซากุระนาโกย่า 9 เม.ย. อาจร่วงแล้ว · ราคาจาก nagoyajo.city.nagoya.jp (ปรับ 1 ต.ค. 2026)","nagoya-castle"],
+ ["14:30","🛏️ แท็กซี่กลับโรงแรม เช็กอิน งีบ/พัก","นอนบนเครื่องน้อย ทุกคนจะเหนื่อย"],
+ ["17:30","🍜 มื้อเย็นเร็ว "+P("Yamamotoya Honten Esca (อุด้งมิโซะ)","Yamamotoya Honten Esca Nagoya")+" สั่งสุดท้าย 21:30","หรือ Furaibo (ปีกไก่) ใน Esca · กินแล้วนอนเร็ว","yamamotoya-esca"]],
+ cafe:"☕ คาเฟ่ในสถานีนาโกย่า/Esca (นั่งรอเข้าห้อง)",
+ care:"👴 แท็กซี่ทุกช่วง เดินน้อย · มีวันนี้จุดเดียว · 🧒 งีบบ่าย · 🧳 ฝากกระเป๋าก่อนเที่ยว ไม่ต้องลาก",
+ backup:["ถ้าเครื่องดีเลย์/เหนื่อยมาก: ข้ามปราสาท พักที่โรงแรม เดินเล่นใต้ดิน Esca แทน (ในร่ม ทางเรียบ)"],
+ bq:[["Furaibo Esca (ปีกไก่)","Furaibo Esca Nagoya","furaibo-dish"],["ใต้ดิน Esca","Esca Underground Shopping Center Nagoya","esca"]]},
 
 {id:"d2",title:"D2 · ส. 10 เม.ย. · นาโกย่า → ทาคายามะ",theme:"นั่งรถ/รถไฟ ~2.5–3 ชม. บ่ายพักสบาย ๆ",
  items:[
  ["09:00","🚌 แผน A: รถเหมารับหน้าโรงแรม → ทาคายามะ ~2.5–3 ชม. แวะจุดพักรถ","🚆 แผน B: JR Hida 09:39 → ทาคายามะ 12:14 (ที่นั่งจอง ¥6,340 · ekitan ตารางปัจจุบัน · ปี 2027 "+C+") · ซื้อเบนโตะที่ JR Nagoya"],
- ["12:30","🍖 ข้าวเที่ยงเนื้อฮิดะ "+P("GYU-SUKE Takayama","GYU-SUKE Takayama Hida beef yakiniku")," เปิดทุกวัน 11:00–22:00 · 94 ที่นั่ง มีห้องกลุ่ม (จองได้)"],
- ["14:00","🧳 ฝากกระเป๋าที่โรงแรม · 🌸 เดินสั้น ๆ "+P("สะพานแดง Nakabashi","Nakabashi Bridge Takayama"),"ซากุระทาคายามะปกติบานกลาง–ปลาย เม.ย. 10 เม.ย. อาจยังตูม "+C],
+ ["12:30","🍖 ข้าวเที่ยงเนื้อฮิดะ "+P("GYU-SUKE Takayama","GYU-SUKE Takayama Hida beef yakiniku")," เปิดทุกวัน 11:00–22:00 · 94 ที่นั่ง มีห้องกลุ่ม (จองได้)","","gyusuke"],
+ ["14:00","🧳 ฝากกระเป๋าที่โรงแรม · 🌸 เดินสั้น ๆ "+P("สะพานแดง Nakabashi","Nakabashi Bridge Takayama"),"ซากุระทาคายามะปกติบานกลาง–ปลาย เม.ย. 10 เม.ย. อาจยังตูม "+C,"nakabashi"],
  ["15:00","🏨 เช็กอิน พัก อาบออนเซ็นในโรงแรม","ผู้สูงอายุ/เด็ก งีบได้"],
- ["18:00","🍱 มื้อเย็น "+P("Kyoya (เนื้อฮิดะ บ้านเก่า)","Hida Takayama Kyoya restaurant")," 17:00–20:00 · ปิดวันอังคาร · มีห้องกลุ่ม (โทรจอง)",""]],
+ ["18:00","🍱 มื้อเย็น "+P("Kyoya (เนื้อฮิดะ บ้านเก่า)","Hida Takayama Kyoya restaurant")," 17:00–20:00 · ปิดวันอังคาร · มีห้องกลุ่ม (โทรจอง)","kyoya-dish"]],
  cafe:"☕ ขนมมิตาราชิดังโงะ ย่านเมืองเก่า (ร้านเล็ก ซื้อเดินกิน)",
  care:"👴 เดินน้อยมาก · 🧒 นอนบนรถ/รถไฟได้ · 🚻 ห้องน้ำบนรถไฟ/จุดพักรถ · 🧳 แผน B: ขบวน Hida ที่วางกระเป๋าจำกัด ไปขึ้นเร็ว "+C,
- backup:["🌸 ถ้าซากุระนาโกย่ายังบาน (แผน A): แวะปราสาทนาโกย่าเช้า ๆ ก่อนออก (¥500) "+C,"Maruaki (ปิ้งย่างเนื้อฮิดะ) 11:00–21:00 · 22 ที่นั่ง ไม่รับจอง → แบ่งกลุ่ม"],
- bq:[["Nagoya Castle","Nagoya Castle"],["Maruaki","Maruaki Hida Takayama"]]},
+ backup:["Maruaki (ปิ้งย่างเนื้อฮิดะ) 11:00–21:00 · 22 ที่นั่ง ไม่รับจอง → แบ่งกลุ่ม"],
+ bq:[["Maruaki","Maruaki Hida Takayama"]]},
 
 {id:"d3",title:"D3 · อา. 11 เม.ย. · ทาคายามะ เมืองเก่า",theme:"ทางเรียบเกือบทั้งวัน กลับไปพักโรงแรมช่วงบ่าย",
  items:[
- ["08:30","🥕 "+P("ตลาดเช้า Miyagawa","Miyagawa Morning Market Takayama")," ทางเรียบริมแม่น้ำ · เม.ย.–พ.ย. 07:00–12:00 · ฟรี"],
- ["09:45","🏯 "+P("Takayama Jinya","Takayama Jinya")," 08:45–17:00 · ¥500 · ม.ปลายลงไปฟรี · ถอดรองเท้า พื้นไม้เย็น"],
- ["11:00","🏮 "+P("ถนนเมืองเก่า Sanmachi","Sanmachi Suji Takayama")," ซูชิเนื้อฮิดะ ขนม ทางเรียบแต่คนเยอะ (วันอาทิตย์)",""],
- ["12:15","🍜 ข้าวเที่ยงย่าน Sanmachi (ราเมงทาคายามะ/ซูชิเนื้อ แบ่งกลุ่มเล็ก) "+C,""],
+ ["08:30","🥕 "+P("ตลาดเช้า Miyagawa","Miyagawa Morning Market Takayama")," ทางเรียบริมแม่น้ำ · เม.ย.–พ.ย. 07:00–12:00 · ฟรี","","miyagawa"],
+ ["09:45","🏯 "+P("Takayama Jinya","Takayama Jinya")," 08:45–17:00 · ¥500 · ม.ปลายลงไปฟรี · ถอดรองเท้า พื้นไม้เย็น","","jinya"],
+ ["11:00","🏮 "+P("ถนนเมืองเก่า Sanmachi","Sanmachi Suji Takayama")," ซูชิเนื้อฮิดะ ขนม ทางเรียบแต่คนเยอะ (วันอาทิตย์)","","sanmachi"],
+ ["12:15","🍜 ข้าวเที่ยงย่าน Sanmachi (ราเมงทาคายามะ/ซูชิเนื้อ แบ่งกลุ่มเล็ก) "+C,"","takayama-ramen-dish"],
  ["13:30","🛏️ กลับโรงแรมพัก 1–2 ชม.","เด็กเล่น/ผู้สูงอายุนอน"],
- ["15:30","🎎 "+P("หอแสดงรถแห่ Yatai Kaikan","Takayama Festival Floats Exhibition Hall")," 09:00–17:00 · ¥1,000 · นั่งแท็กซี่ได้","🎎 เทศกาลฤดูใบไม้ผลิ (ซันโน) จริง 14–15 เม.ย. 2027 (หลังเราออกจากทาคายามะ) → ดูรถแห่จริงที่หอนี้แทน"],
+ ["15:30","🎎 "+P("หอแสดงรถแห่ Yatai Kaikan","Takayama Festival Floats Exhibition Hall")," 09:00–17:00 · ¥1,000 · นั่งแท็กซี่ได้","🎎 เทศกาลฤดูใบไม้ผลิ (ซันโน) จริง 14–15 เม.ย. 2027 (หลังเราออกจากทาคายามะ) → ดูรถแห่จริงที่หอนี้แทน","yatai"],
  ["18:30","🍖 มื้อเย็น GYU-SUKE/Maruaki หรือแพ็กอาหารเย็นโรงแรม · 📦 แผน B: ฝากกระเป๋าใหญ่ส่งไปโรงแรมคานาซาวะ (takkyubin) ที่เคาน์เตอร์โรงแรม","ส่งวันนี้ ถึงพรุ่งนี้ "+C]],
  cafe:"☕ คาเฟ่ริมแม่น้ำย่าน Sanmachi (เลือกร้านที่มีที่นั่ง)",
  care:"👴 เดินรวม ~2 กม. แบ่งเป็นช่วงสั้น · ใช้แท็กซี่ได้ · 🚻 ห้องน้ำสาธารณะในเมืองเก่า · 🧒 ตลาดเช้า+ซูชิเนื้อ",
  backup:["Hida Folk Village (หมู่บ้านบ้านโบราณ) มีเนินลาดชัน เหมาะคนเดินไหว","🌸 ไลท์อัปซากุระ Nakabashi ช่วงค่ำ (ถ้าบานแล้ว) "+C],
- bq:[["Hida Folk Village","Hida Folk Village Hida no Sato"],["GYU-SUKE","GYU-SUKE Takayama"]]},
+ bq:[["Hida Folk Village","Hida Folk Village Hida no Sato","hida-folk"],["GYU-SUKE","GYU-SUKE Takayama"]]},
 
 {id:"d4",title:"D4 · จ. 12 เม.ย. · ชิราคาวะโกะ → คานาซาวะ",theme:"หมู่บ้านหลังคามุงจาก แล้วไปนอนคานาซาวะ",
  items:[
  ["09:00","🏨 เช็กเอาต์ ถือแค่กระเป๋าเล็ก",""],
  ["09:30","🚌 แผน A: รถเหมา ~1 ชม. จอดลานบัส Seseragi (ต้องจองล่วงหน้า ¥10,000/คัน)","🚌 แผน B: บัส Nohi 09:50 จาก "+P("Takayama Nohi Bus Center","Takayama Nohi Bus Center")+" → ชิราคาวะโกะ 10:40 · ต้องจอง · ¥2,900 (เวลาปี 2027 "+C+")"],
- ["10:50","🗻 รถรับส่งขึ้น "+P("จุดชมวิว Shiroyama","Shiroyama Viewpoint Shirakawa-go")," ¥300/เที่ยว เงินสด · ทุก 20 นาที 09:00–15:40 (เว้นช่วงเที่ยง)","ผู้สูงอายุนั่งรถขึ้น-ลง ไม่ต้องเดินขึ้นเขา"],
- ["11:40","🏠 "+P("Wada House","Wada House Shirakawa-go")," ¥400 / เด็กประถม ¥200 · ชั้นบนบันไดชัน ผู้สูงอายุอยู่ชั้นล่าง"],
- ["12:15","🍲 ข้าวเที่ยง "+P("Irori","Shirakawago Restaurant Irori")," 10:00–14:00 ปิดวันพุธ (วันจันทร์เปิด) "+C,"18 คน: แบ่ง 2–3 ร้าน"],
+ ["10:50","🗻 รถรับส่งขึ้น "+P("จุดชมวิว Shiroyama","Shiroyama Viewpoint Shirakawa-go")," ¥300/เที่ยว เงินสด · ทุก 20 นาที 09:00–15:40 (เว้นช่วงเที่ยง)","ผู้สูงอายุนั่งรถขึ้น-ลง ไม่ต้องเดินขึ้นเขา","shiroyama"],
+ ["11:40","🏠 "+P("Wada House","Wada House Shirakawa-go")," ¥400 / เด็กประถม ¥200 · ชั้นบนบันไดชัน ผู้สูงอายุอยู่ชั้นล่าง","","wada"],
+ ["12:15","🍲 ข้าวเที่ยง "+P("Irori","Shirakawago Restaurant Irori")," 10:00–14:00 ปิดวันพุธ (วันจันทร์เปิด) "+C,"18 คน: แบ่ง 2–3 ร้าน","irori"],
  ["13:50","🚌 → "+P("สถานีคานาซาวะ","Kanazawa Station")," แผน B บัส ถึง 15:05 · ต้องจอง · ¥2,900 / แผน A รถเหมา ~1 ชม.15",""],
- ["15:30","🏨 เช็กอินโรงแรมหน้าสถานี · 🍣 เย็น "+P("Maimon Sushi สาขาสถานี","Kanazawa Maimon Sushi Kanazawa Station")," 11:00–22:00","ซูชิสายพาน เด็กชอบ"]],
+ ["15:30","🏨 เช็กอินโรงแรมหน้าสถานี · 🍣 เย็น "+P("Maimon Sushi สาขาสถานี","Kanazawa Maimon Sushi Kanazawa Station")," 11:00–22:00","ซูชิสายพาน เด็กชอบ · ร้านอยู่ใน Hyakubangai (Anto)","maimon"]],
  cafe:"☕ ร้านกาแฟในบ้านมุงจากที่ชิราคาวะโกะ (เลือกร้านที่ไม่มีบันได)",
  care:"👴 ในหมู่บ้านทางเรียบแต่เป็นกรวด · ❄️ กลาง เม.ย. อาจยังมีหิมะค้าง พื้นแฉะ → รองเท้ากันน้ำกันลื่น + เสื้อกันหนาว · 🚻 ห้องน้ำที่ลานบัส",
- backup:["Shiraogi (ร้านอาหารท้องถิ่นใกล้ Wada House) "+C,"ถ้าบัสเต็ม: ไป Takayama → Kanazawa ด้วยบัสตรงก่อน แล้วข้ามชิราคาวะโกะ"],
+ backup:[["Shiraogi (ร้านอาหารท้องถิ่นใกล้ Wada House) "+C,"shiraogi"],"ถ้าบัสเต็ม: ไป Takayama → Kanazawa ด้วยบัสตรงก่อน แล้วข้ามชิราคาวะโกะ"],
  bq:[["Shiraogi","Shiraogi Shirakawa-go"],["Kanazawa Hyakubangai","Kanazawa Hyakubangai"]]},
 
 {id:"d5",title:"D5 · อ. 13 เม.ย. · คานาซาวะ เต็มวัน",theme:"สวน ปราสาท ตลาด ย่านเก่า มีพักกลางวัน",
  items:[
- ["08:00","🌳🌸 "+P("สวน Kenrokuen","Kenrokuen Garden")," (แท็กซี่ ~10 นาที) · มี.ค.–15 ต.ค. 07:00–18:00 · ¥320 · เด็ก 6–17 ¥100 · 65+ ฟรี (แสดงพาสปอร์ต)","🌸 ซากุระคานาซาวะปกติบานต้น เม.ย. 13 เม.ย. อาจบานเต็ม–เริ่มร่วง · ช่วงเปิดฟรี+ไลท์อัป ~7 วัน (ปี 2026: 2–8 เม.ย.) อาจไม่ตรงวันเรา "+C+" · ทางกรวด มีม้านั่ง/ห้องน้ำ"],
- ["10:30","🏯 "+P("ปราสาทคานาซาวะ","Kanazawa Castle Park")," ข้ามถนนจากสวน ทางกว้างเรียบ · ฟรี (ส่วนสวน)",""],
- ["11:45","🐟 ข้าวเที่ยง "+P("ตลาด Omicho","Omicho Market Kanazawa")," ข้าวหน้าซีฟู้ด (วันอังคารร้านส่วนใหญ่เปิด · หลายร้านปิดพุธ/อาทิตย์)","แท็กซี่ ~10 นาที"],
+ ["08:00","🌳🌸 "+P("สวน Kenrokuen","Kenrokuen Garden")," (แท็กซี่ ~10 นาที) · มี.ค.–15 ต.ค. 07:00–18:00 · ¥320 · เด็ก 6–17 ¥100 · 65+ ฟรี (แสดงพาสปอร์ต)","🌸 ซากุระคานาซาวะปกติบานต้น เม.ย. 13 เม.ย. อาจบานเต็ม–เริ่มร่วง · ช่วงเปิดฟรี+ไลท์อัป ~7 วัน (ปี 2026: 2–8 เม.ย.) อาจไม่ตรงวันเรา "+C+" · ทางกรวด มีม้านั่ง/ห้องน้ำ","kenrokuen"],
+ ["10:30","🏯 "+P("ปราสาทคานาซาวะ","Kanazawa Castle Park")," ข้ามถนนจากสวน ทางกว้างเรียบ · ฟรี (ส่วนสวน)","","kanazawa-castle"],
+ ["11:45","🐟 ข้าวเที่ยง "+P("ตลาด Omicho","Omicho Market Kanazawa")," ข้าวหน้าซีฟู้ด (วันอังคารร้านส่วนใหญ่เปิด · หลายร้านปิดพุธ/อาทิตย์)","แท็กซี่ ~10 นาที","omicho"],
  ["13:15","🛏️ กลับโรงแรมพัก 1–2 ชม.",""],
- ["15:30","🏮 "+P("ย่าน Higashi Chaya","Higashi Chaya District Kanazawa")," ไอศกรีมทองคำเปลว (แท็กซี่)","ถนนเรียบ เดินสั้น ๆ ~30–45 นาที"],
- ["18:00","🍣 เย็นในสถานี "+P("Kanazawa Hyakubangai","Kanazawa Hyakubangai")," (หลายร้าน แบ่งกลุ่มง่าย)","📦 แผน B: ส่งกระเป๋าใหญ่ไปโรงแรมสนามบิน ถึง 14 เม.ย. "+C]],
+ ["15:30","🏮 "+P("ย่าน Higashi Chaya","Higashi Chaya District Kanazawa")," ไอศกรีมทองคำเปลว (แท็กซี่)","ถนนเรียบ เดินสั้น ๆ ~30–45 นาที","higashi-chaya"],
+ ["18:00","🍣 เย็นในสถานี "+P("Kanazawa Hyakubangai","Kanazawa Hyakubangai")," (หลายร้าน แบ่งกลุ่มง่าย)","📦 แผน B: ส่งกระเป๋าใหญ่ไปโรงแรมสนามบิน ถึง 14 เม.ย. "+C,"hyakubangai"]],
  cafe:"☕ ร้านชาในสวน Kenrokuen (นั่งพัก)",
  care:"👴 ใช้แท็กซี่ระหว่างจุด (GO เรียกหลายคัน) · 🚻 ห้องน้ำในสวน/ตลาด · 🧒 ไอศกรีมทองคำเปลว",
  backup:["🎨 พิพิธภัณฑ์ 21st Century (โซนนิทรรศการ 10:00–18:00 ปิดวันจันทร์ · วันอังคารเปิด) เด็กชอบ","Nagamachi ย่านซามูไร (ถนนแคบ เดินสั้น ๆ)"],
- bq:[["21st Century Museum","21st Century Museum of Contemporary Art Kanazawa"],["Nagamachi","Nagamachi Samurai District"]]},
+ bq:[["21st Century Museum","21st Century Museum of Contemporary Art Kanazawa","museum21"],["Nagamachi","Nagamachi Samurai District","nagamachi"]]},
 
 {id:"d6",title:"D6 · พ. 14 เม.ย. · คานาซาวะ → สนามบินนาโกย่า",theme:"ย้ายครั้งสุดท้าย บ่ายเที่ยวในสนามบิน (เดินน้อยสุด)",
  items:[
  ["09:00","🚌 แผน A: รถเหมา คานาซาวะ → สนามบิน Centrair ~3–3.5 ชม. แวะจุดพักรถ","🚄 แผน B: ชินคันเซ็น Tsurugi → Tsuruga ต่อ Shirasagi → Nagoya ~2 ชม.45 (¥9,080 ที่นั่งจอง · เวลาจริง "+C+") → μSKY → สนามบิน ~30 นาที (¥1,430)"],
- ["12:30","🍛 ข้าวเที่ยง "+P("Yabaton สนามบิน (มิโซะคัตสึ)","Yabaton Chubu Centrair")," 10:00–21:00","แผน B: กินฮิตสึมาบุชิ "+P("Maruya Honten JR Nagoya","Maruya Honten JR Nagoya Station")+" 11:00–22:00 ก่อนขึ้น μSKY"],
+ ["12:30","🍛 ข้าวเที่ยง "+P("Yabaton สนามบิน (มิโซะคัตสึ)","Yabaton Chubu Centrair")," 10:00–21:00","แผน B: กินฮิตสึมาบุชิ "+P("Maruya Honten JR Nagoya","Maruya Honten JR Nagoya Station")+" 11:00–22:00 ก่อนขึ้น μSKY (ภาพล่างที่ 2 = ภาพเมนู ไม่ใช่รูปร้าน)",["yabaton-centrair","hitsumabushi-dish"]],
  ["14:00","🏨 เช็กอิน/ฝากกระเป๋า "+P("โรงแรมสนามบิน","Comfort Hotel Central International Airport")," (ทางเดินเชื่อมอาคาร)",""],
- ["15:00","🛩️ "+P("Flight of Dreams","Flight of Dreams Centrair")," ฟรี 10:00–17:00 (เข้าได้ถึง 16:30) · เครื่องบิน 787 จริง · ในร่ม ทางเรียบ","เด็กชอบมาก"],
+ ["15:00","🛩️ "+P("Flight of Dreams","Flight of Dreams Centrair")," ฟรี 10:00–17:00 (เข้าได้ถึง 16:30) · เครื่องบิน 787 จริง · ในร่ม ทางเรียบ","เด็กชอบมาก","flight-of-dreams"],
  ["18:00","♨️ "+P("Fu no Yu สปาวิวรันเวย์","Fu no Yu Centrair")," 08:00–22:00 · ¥1,600–1,800 · แล้วกินเย็น/ซื้อของฝากในสนามบิน",""]],
  cafe:"☕ Seattle Terrace (ใน Flight of Dreams)",
  care:"👴 บ่ายอยู่ในอาคารทั้งหมด · 🚻 ห้องน้ำทุกจุด · 🛌 นอนเร็ว พรุ่งนี้บินเช้า",
- backup:["🏯 ปราสาทนาโกย่า 09:00–16:30 · ¥500 (แผน B ระหว่างทาง ต้องเดินมากกว่า) "+C,"🛍️ Aeon Mall Tokoname (ใกล้สนามบิน ห้างในร่ม) เวลาเปิด "+C],
- bq:[["Nagoya Castle","Nagoya Castle"],["Aeon Mall Tokoname","Aeon Mall Tokoname"]]},
+ backup:["🛍️ Aeon Mall Tokoname (ใกล้สนามบิน ห้างในร่ม) เวลาเปิด "+C],
+ bq:[["Aeon Mall Tokoname","Aeon Mall Tokoname","aeon-tokoname"]]},
 
 {id:"d7",title:"D7 · พฤ. 15 เม.ย. · บินกลับ",theme:"เดินจากโรงแรมไปอาคารผู้โดยสาร",
  items:[
  ["07:30","🏨 อาหารเช้า เช็กเอาต์ เดินทางเดินเชื่อมไปอาคาร",""],
  ["08:00","🛂 เช็กอินกลุ่ม (เผื่อ 3 ชม.) · ของฝากโซนขาออก",""],
- ["11:00","✈️ TG (เลขไฟลต์รอยืนยัน) NGO 11:00 → BKK 15:00 (6 ชม.)","🇹🇭 ตรงสงกรานต์"]],
+ ["11:00","✈️ <b>TG 645</b> NGO 11:00 → BKK 15:00 (6 ชม.) · Boeing 787","🇹🇭 ตรงสงกรานต์"]],
  cafe:"☕ ร้านในอาคารผู้โดยสาร",care:"👴 ขอรถเข็นที่เคาน์เตอร์สายการบินได้ (แจ้งล่วงหน้า) "+C,backup:[],bq:[]}
 ];
 
 var NIGHTS={ng:1,tk:2,kz:2,ap:1};
 var HOTEL_PP={ng:16000,tk:12000,kz:6000,ap:6000}; // ประมาณการต่อคน/คืน (อิงราคาห้อง 2 คน ÷ 2 ปัดขึ้น)
-var FLIGHT_THB=29080; // Google Flights 31 ต.ค. 2026 ไปกลับ/คน ชั้นประหยัด
+var FLIGHT_THB=30080; // Google Flights 31 ต.ค. 2026 TG 644/645 ไปกลับ/คน ชั้นประหยัด
 var CHARTER_DAY=165000; // ประมาณการ/วัน รวมทางด่วน ที่พักคนขับ
 var CHARTER_DAYS=5; // D2–D6
-var FOOD=33000,ENT=5000,LOCAL=3500;
+var FOOD=35000,ENT=6000,LOCAL=3500; // D1 เพิ่มมื้อเที่ยง · ค่าเข้าปราสาทนาโกย่า ¥1,000
 
 function budget(){
  var n=NIGHTS,hot=n.ng*HOTEL_PP.ng+n.tk*HOTEL_PP.tk+n.kz*HOTEL_PP.kz+n.ap*HOTEL_PP.ap;
@@ -203,7 +218,7 @@ function render(){
  '<p class="mu">ที่มา: thaiembassy.jp, osaka.thaiembassy.org, touristpass.jp</p></section>';
 
  h+='<section id="book"><h2>🎟️ ต้องจองล่วงหน้า</h2><ul>'+
- '<li><b>ตั๋ว TG 18 ที่</b> 9 เม.ย. ไป / 15 เม.ย. กลับ · ขอราคากลุ่มจากการบินไทย (ซื้อ 18 ที่ทีเดียวราคาอาจขึ้น) · ขากลับตรงสงกรานต์ ตั๋วหมดเร็ว</li>'+
+ '<li><b>ตั๋ว TG 18 ที่</b> TG 644 (ออก 00:05 คืนวันที่ 8→9 เม.ย.) / TG 645 15 เม.ย. · ขอราคากลุ่มจากการบินไทย (ซื้อ 18 ที่ทีเดียวราคาอาจขึ้น) · ขากลับตรงสงกรานต์ ตั๋วหมดเร็ว</li>'+
  '<li><b>ที่พัก ~6 ห้อง × 4 แห่ง</b> · 🌸 ช่วงซากุระ ห้องเต็มเร็ว จองเร็วที่สุด (เลือกแบบยกเลิกฟรี)</li>'+
  '<li><b>รถบัสเหมา 27 ที่นั่ง</b> 5 วัน (10–14 เม.ย.) + เที่ยวรับสนามบิน 9 เม.ย. (ถ้าต้องการ) ขอใบเสนอราคา 2–3 เจ้า (ทะเบียนเขียว ถูกกฎหมาย)</li>'+
  '<li><b>ลานจอดบัสชิราคาวะโกะ</b> (ถ้าใช้รถเหมา) จองล่วงหน้าเท่านั้น ตั้งแต่ 1 ธ.ค. 2026 · ¥10,000/คัน</li>'+
@@ -211,13 +226,13 @@ function render(){
  '<li><b>ที่นั่งจอง JR Hida</b> 18 ที่ติดกัน · <b>Tsurugi + Shirasagi</b> (แผน B)</li>'+
  '<li><b>ร้านอาหารกลุ่ม</b>: Kyoya / GYU-SUKE (มีห้องกลุ่ม)</li>'+
  '<li><b>ส่งกระเป๋า</b> (แผน B): แจ้งโรงแรมวันก่อนย้าย</li></ul>'+
- '<div class="box">งบต่อคน (ประมาณการ) แผน A <span class="big">'+thb(b.ppA)+'</span> · แผน B '+thb(b.ppB)+'<br><span class="mu">รวมตั๋วเครื่องบิน ฿29,080 + สำรอง 10% · ดูรายละเอียดในหมวดงบ</span></div></section>';
+ '<div class="box">งบต่อคน (ประมาณการ) แผน A <span class="big">'+thb(b.ppA)+'</span> · แผน B '+thb(b.ppB)+'<br><span class="mu">รวมตั๋วเครื่องบิน ฿30,080 + สำรอง 10% · ดูรายละเอียดในหมวดงบ</span></div></section>';
 
  h+='<section id="budget"><h2>💰 งบประมาณ 7 วัน 6 คืน — ประมาณการ</h2>'+
  '<p class="mu">อัตรา 1 เยน = '+FX.toFixed(4)+' บาท (open.er-api.com 31 ต.ค. 2026 07:02 เวลาไทย) · ราคาผู้ใหญ่ · เด็ก 6–11 ค่ารถลดครึ่ง</p>'+
  '<div class="tw"><table><tr><th>รายการ/คน (แผน B รถไฟ+บัส)</th><th class="r">เยน</th><th class="r">บาท</th></tr>'+
  b.rowsB.map(function(r){return '<tr><td>'+r[0]+'</td><td class="r">'+yen(r[1])+'</td><td class="r">'+thb(r[1]*FX)+'</td></tr>';}).join("")+
- '<tr><td>ตั๋ว TG ไปกลับ (Google Flights)</td><td class="r">–</td><td class="r">'+thb(FLIGHT_THB)+'</td></tr>'+
+ '<tr><td>ตั๋ว TG 644/645 ไปกลับ (Google Flights)</td><td class="r">–</td><td class="r">'+thb(FLIGHT_THB)+'</td></tr>'+
  '<tr><td><b>รวม + สำรอง 10%</b></td><td class="r"></td><td class="r"><b>'+thb(b.ppB)+'</b></td></tr></table></div>'+
  '<div class="tw"><table><tr><th>สรุป</th><th class="r">ต่อคน</th><th class="r">18 คน</th></tr>'+
  '<tr><td><b>แผน A</b> รถเหมา '+CHARTER_DAYS+' วัน ⭐</td><td class="r">'+thb(b.ppA)+'</td><td class="r">'+thb(b.ppA*18)+'</td></tr>'+
@@ -228,16 +243,16 @@ function render(){
  '<li>μSKY ¥1,430 (meitetsu.co.jp) · Hida นาโกย่า–ทาคายามะ ¥6,340 ที่นั่งจอง (ekitan) · บัส ¥2,900×2 (nouhibus.co.jp, ตั้งแต่ 1 ธ.ค. 2026) · คานาซาวะ–นาโกย่า ¥9,080 (jr-group.jp)</li>'+
  '<li>ส่งกระเป๋า Yamato 160 ไซซ์ ภาคกลาง↔โฮคุริคุ ¥3,020 × 2 ช่วง (kuronekoyamato.co.jp) · ช่วงนาโกย่า→ทาคายามะ ถือขึ้นรถไฟเอง</li>'+
  '<li>รถบัสกลาง 27 ที่ เริ่ม ~¥139,521/วัน (bus-trip.jp) · นาโกย่า–ทาคายามะ 10 ชม. เริ่ม ¥150,700 (rakuraku-bus.com) + ทางด่วน/ที่พักคนขับ → ใช้ ¥165,000/วัน '+C+'</li>'+
- '<li>อาหาร ~¥6,000/คน/วัน (D1 แค่มื้อเย็น D7 แค่มื้อเช้า) · ตั๋ว TG ฿29,080/คน ไปกลับ ชั้นประหยัด 1 ผู้ใหญ่ (Google Flights ดู 31 ต.ค. 2026 · ยังไม่แสดงกระเป๋า)</li>'+
+ '<li>อาหาร ~¥6,000/คน/วัน (D1 เที่ยง+เย็น D7 แค่มื้อเช้า) · ค่าเข้าชม: Jinya, Yatai Kaikan, รถ Shiroyama, Wada, Kenrokuen, ปราสาทนาโกย่า ¥1,000, Fu no Yu · ตั๋ว TG 644/645 ฿30,080/คน ไปกลับ ชั้นประหยัด 1 ผู้ใหญ่ (Google Flights ดู 31 ต.ค. 2026 · ยังไม่แสดงกระเป๋า)</li>'+
  '<li>ไม่รวม: ประกัน ซิม ของฝาก</li></ul></details></section>';
 
  h+='<section id="flights"><h2>✈️ เที่ยวบิน (ยังไม่จอง)</h2><ul>'+
- '<li><b>ขาไป ศ. 9 เม.ย. 2027</b> · การบินไทย TG (เลขไฟลต์รอยืนยัน) บินตรง BKK 11:00 → NGO 18:55 · 5 ชม.55</li>'+
- '<li><b>ขากลับ พฤ. 15 เม.ย. 2027</b> · การบินไทย TG (เลขไฟลต์รอยืนยัน) บินตรง NGO 11:00 → BKK 15:00 · 6 ชม.</li></ul>'+
- '<div class="box">ราคา <span class="big">฿29,080</span>/คน ไปกลับ ชั้นประหยัด<br><span class="mu">Google Flights ดู 31 ต.ค. 2026 · ราคา 1 ผู้ใหญ่ ยังไม่แสดงค่ากระเป๋า · ขอราคากลุ่มจากการบินไทย (18 ที่อาจแพงขึ้น) · ขากลับตรงสงกรานต์</span></div></section>';
+ '<li><b>ขาไป ศ. 9 เม.ย. 2027</b> · การบินไทย <b>TG 644</b> บินตรง BKK 00:05 → NGO 08:00 · 5 ชม.55 · Boeing 787 · ⚠️ มักดีเลย์ 30 นาทีขึ้นไป (Google Flights)<br><span class="mu">ไฟลต์ออกหลังเที่ยงคืน → ออกจากบ้าน <b>พฤ. 8 เม.ย. เย็น</b> เช็กอินที่ BKK ~21:00 (ระวังจองผิดวัน)</span></li>'+
+ '<li><b>ขากลับ พฤ. 15 เม.ย. 2027</b> · การบินไทย <b>TG 645</b> บินตรง NGO 11:00 → BKK 15:00 · 6 ชม. · Boeing 787</li></ul>'+
+ '<div class="box">ราคา <span class="big">฿30,080</span>/คน ไปกลับ ชั้นประหยัด<br><span class="mu">Google Flights ดู 31 ต.ค. 2026 · ราคา 1 ผู้ใหญ่ ยังไม่แสดงค่ากระเป๋า · ราคากลุ่ม 18 ที่ / ที่นั่งว่าง 18 ที่ / น้ำหนักกระเป๋า <span class="chk">รอยืนยัน</span> · ขากลับตรงสงกรานต์</span></div></section>';
 
  h+='<section id="transport"><h2>🚌 การเดินทาง: เทียบ 2 แบบ</h2>'+
- '<h3>แผน A ⭐ รถบัสเหมา 18–27 ที่นั่ง (แนะนำ)</h3><ul><li>10–14 เม.ย. รับหน้าโรงแรม ไม่ต้องลากกระเป๋าขึ้นรถไฟ เหมาะผู้สูงอายุ</li><li>วันแรกค่ำ: μSKY หรือจ้างรถรับสนามบินเพิ่ม '+C+'</li><li>ต้องขอใบเสนอราคา ระวังรถผิดกฎหมาย (ป้ายขาว) · คนขับมีชั่วโมงทำงานจำกัด · ทางภูเขาอาจยังมีหิมะ ถามเรื่องยางหิมะ</li></ul>'+
+ '<h3>แผน A ⭐ รถบัสเหมา 18–27 ที่นั่ง (แนะนำ)</h3><ul><li>10–14 เม.ย. รับหน้าโรงแรม ไม่ต้องลากกระเป๋าขึ้นรถไฟ เหมาะผู้สูงอายุ</li><li>วันแรกเช้า (ถึง 08:00): μSKY หรือจ้างรถรับสนามบินเพิ่ม '+C+'</li><li>ต้องขอใบเสนอราคา ระวังรถผิดกฎหมาย (ป้ายขาว) · คนขับมีชั่วโมงทำงานจำกัด · ทางภูเขาอาจยังมีหิมะ ถามเรื่องยางหิมะ</li></ul>'+
  '<h3>แผน B รถไฟ + บัส + ส่งกระเป๋า</h3><ul><li>D1 μSKY สนามบิน→Meitetsu Nagoya ~30 นาที</li><li>D2 Hida นาโกย่า→ทาคายามะ ~2 ชม.35</li><li>D4 บัส ทาคายามะ→ชิราคาวะโกะ ~50 นาที · ชิราคาวะโกะ→คานาซาวะ ~1 ชม.15 (ต้องจองทั้งคู่)</li><li>D6 คานาซาวะ→นาโกย่า ชินคันเซ็นต่อ Shirasagi ที่ Tsuruga ~2 ชม.45 → μSKY</li><li>ส่งกระเป๋า: ทาคายามะ→คานาซาวะ (ส่ง D3) · คานาซาวะ→สนามบิน (ส่ง D5)</li></ul>'+
  '<p class="mu">พาส Takayama-Hokuriku ¥19,800 (5 วัน) ไม่ครอบคลุม Tsuruga–Nagoya เส้นนี้ซื้อตั๋วแยกถูกกว่า (คำนวณคร่าว ๆ) '+C+'</p></section>';
 
@@ -270,10 +285,11 @@ function render(){
 
  DAYS.forEach(function(d){
   h+='<section id="'+d.id+'"><h2>'+d.title+'</h2><div class="mu">'+d.theme+'</div><ul class="tl">'+
-  d.items.map(function(it){return '<li><span class="t">'+it[0]+'</span><span>'+it[1]+(it[2]?'<div class="n">'+it[2]+'</div>':'')+'</span></li>';}).join("")+
+  d.items.map(function(it){var ex=it.slice(2),im=null,l=ex[ex.length-1];if(ex.length&&(Array.isArray(l)||IMG[l])){im=l;ex=ex.slice(0,-1);}
+  return '<li><span class="t">'+it[0]+'</span><span>'+it[1]+ex.filter(Boolean).map(function(n){return '<div class="n">'+n+'</div>';}).join("")+Fs(im)+'</span></li>';}).join("")+
   '</ul><div>'+d.cafe+'</div><div class="mu" style="margin-top:4px">'+d.care+'</div>';
-  if(d.backup.length||d.bq.length){h+='<details><summary>ร้าน/ที่เที่ยวทางเลือก</summary><ul>'+d.backup.map(function(x){return '<li>'+x+'</li>';}).join("")+
-   d.bq.map(function(q){return '<li>'+P(q[0],q[1])+'</li>';}).join("")+'</ul></details>';}
+  if(d.backup.length||d.bq.length){h+='<details><summary>ร้าน/ที่เที่ยวทางเลือก</summary><ul>'+d.backup.map(function(x){return typeof x==="string"?'<li>'+x+'</li>':'<li>'+x[0]+Fs(x[1],1)+'</li>';}).join("")+
+   d.bq.map(function(q){return '<li>'+P(q[0],q[1])+Fs(q[2],1)+'</li>';}).join("")+'</ul></details>';}
   h+='</section>';
  });
 
@@ -289,16 +305,20 @@ function render(){
  '<li>💴 ค่าบัส Nohi/Hokutetsu ขึ้นราคา 1 ธ.ค. 2026 · ลานจอดบัสชิราคาวะโกะต้องจอง · รถท่องเที่ยวห้ามเข้าหมู่บ้าน 9:00–16:00</li>'+
  '<li>🧒 อายุเด็กมีผลกับราคา (6–11 ครึ่งราคา, ต่ำกว่า 6 ส่วนใหญ่ฟรี) '+C+'</li></ul>'+
  '<h3>สมมติฐาน</h3><ul class="mu"><li>18 คน: คิดราคาผู้ใหญ่ทุกคน · พักห้องละ 3 คน · กระเป๋าใหญ่คนละ 1 ใบ</li><li>ซากุระบานเร็ว/ช้าตามอากาศแต่ละปี ดูพยากรณ์ (tenki.jp) ช่วง มี.ค. 2027</li></ul>'+
- '<details><summary>บันทึกการแก้ไข (changelog)</summary><ul class="mu"><li>v2.0 · 31 ต.ค. 2026 — ปรับเป็น 7 วัน 6 คืน 9–15 เม.ย. 2027 บิน TG · เพิ่มคืนแรกนาโกย่า · ราคาที่พักตามวันจริง · งบใหม่ · เลิกสลับ 5/6 วัน</li><li>v1.1 · 31 ต.ค. 2026 — ปรับเป็นต้นเมษายน 2027: ซากุระ, หิมะชิราคาวะโกะ, ปิดเทอมญี่ปุ่น/สงกรานต์, ราคาที่พักต้น เม.ย., ตารางบินฤดูร้อน</li><li>v1.0 · 31 ต.ค. 2026 — แผนแรก 5 วัน/6 วัน, เทียบรถเหมา vs รถไฟ, งบประมาณ, ใช้ออฟไลน์ได้</li></ul></details></section>';
+ '<details><summary>บันทึกการแก้ไข (changelog)</summary><ul class="mu"><li>v2.1 · 31 ต.ค. 2026 — เพิ่มรูปสถานที่และร้านอาหาร (+เครดิตรูป) · ขาไปเปลี่ยนเป็น TG 644 BKK 00:05 → NGO 08:00 (ออกจากบ้าน 8 เม.ย. ค่ำ) · ขากลับ TG 645 · ตั๋ว ฿30,080/คน · D1 ใหม่: วันเบา ๆ ฝากกระเป๋า ปราสาทนาโกย่า กินเย็นเร็ว · ค่าเข้าปราสาท ¥1,000 (ราคาใหม่ 1 ต.ค. 2026) · งบใหม่</li><li>v2.0 · 31 ต.ค. 2026 — ปรับเป็น 7 วัน 6 คืน 9–15 เม.ย. 2027 บิน TG · เพิ่มคืนแรกนาโกย่า · ราคาที่พักตามวันจริง · งบใหม่ · เลิกสลับ 5/6 วัน</li><li>v1.1 · 31 ต.ค. 2026 — ปรับเป็นต้นเมษายน 2027: ซากุระ, หิมะชิราคาวะโกะ, ปิดเทอมญี่ปุ่น/สงกรานต์, ราคาที่พักต้น เม.ย., ตารางบินฤดูร้อน</li><li>v1.0 · 31 ต.ค. 2026 — แผนแรก 5 วัน/6 วัน, เทียบรถเหมา vs รถไฟ, งบประมาณ, ใช้ออฟไลน์ได้</li></ul></details></section>';
 
  h+='<section id="todo"><h2>⚠️ ยังไม่ยืนยัน (เช็กก่อนจอง)</h2><ul>'+
- '<li>✈️ เลขไฟลต์ TG ทั้ง 2 เที่ยว · ราคากลุ่ม 18 ที่ · น้ำหนักกระเป๋า</li>'+
+ '<li>✈️ TG 644/645: ราคากลุ่ม 18 ที่ · ที่นั่งว่าง 18 ที่ · น้ำหนักกระเป๋า · TG 644 มักดีเลย์</li>'+'<li>🏨 เช็กอินก่อนเวลา 9 เม.ย. (ค่าใช้จ่ายเพิ่ม?) โรงแรมนาโกย่า</li>'+
  '<li>🌸 วันบานซากุระ 2027 (ทาคายามะ/คานาซาวะ/นาโกย่า) · วันเปิดฟรี+ไลท์อัป Kenrokuen 2027</li>'+
  '<li>🚌 ราคารถเหมาจริง 5–6 วัน · ชั่วโมงคนขับ · ยางหิมะ · เที่ยวรับสนามบินคืนแรก</li>'+
  '<li>🏨 ห้อง 3 คน/ห้องครอบครัว ราคาจริง (ราคาในแอปคือห้อง 2 คน) · โรงแรมยังเปิดขาย เม.ย. ไม่ครบ</li>'+
  '<li>🚆 ตาราง Hida / Tsurugi+Shirasagi / บัส Nohi ปี 2027 (ตารางเปลี่ยนกลาง มี.ค.) · ค่าตั๋วช่วงฤดู</li>'+
  '<li>📦 ส่งกระเป๋าถึงวันถัดไปจริงหรือไม่ (ทาคายามะ→คานาซาวะ, คานาซาวะ→สนามบิน)</li>'+
  '<li>🍽️ เวลาเปิดร้าน Irori · ร้านข้าวเที่ยง D3 · เวลาเปิด Aeon Mall Tokoname · ราคา Fu no Yu</li></ul></section>';
+
+ h+='<section id="credits"><h2>📷 เครดิตรูปภาพ</h2><details><summary>เครดิตรูปภาพ ('+Object.keys(IMG).length+' รูป)</summary><ul class="cr">'+
+ Object.keys(IMG).map(function(k){var i=IMG[k];return '<li><b>'+i[2]+'</b> — '+(i[3]==="Wikimedia Commons"?'<a href="'+i[4]+'" target="_blank" rel="noopener">Wikimedia Commons</a> · '+i[5]+' · '+(i[7]?'<a href="'+i[7]+'" target="_blank" rel="noopener">'+i[6]+'</a>':i[6]):'<a href="'+i[4]+'" target="_blank" rel="noopener">'+i[3]+'</a> · '+i[6])+'</li>';}).join("")+
+ '</ul><p class="mu">ย่อขนาดเป็น webp ไม่ได้แก้เนื้อหาภาพ · ภาพที่เขียนว่า "ภาพอาหาร" คือภาพเมนู ไม่ใช่รูปร้าน · ไม่มีรูป: Maruaki, Fu no Yu (ไม่พบรูปที่ใช้ได้ถูกต้อง)</p></details></section>';
 
  document.getElementById("app").innerHTML=h;
  observe();
