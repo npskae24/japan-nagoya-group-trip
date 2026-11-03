@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#1f3a5f">
-<title>ทริปญี่ปุ่น นาโกย่า–ทาคายามะ–ชิราคาวะโกะ–คานาซาวะ (18 คน)</title>
+<title>แผนทริปญี่ปุ่น</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -61,6 +61,8 @@ td.r,th.r{text-align:right;white-space:nowrap}
 .fig.sm{max-width:240px}
 .fig figcaption a{color:var(--mu)}
 .cr li{font-size:12.5px;margin:4px 0}
+.site{font-size:22px;font-weight:800;margin:8px 0 2px;letter-spacing:.2px}
+#hdr h1{font-size:16px;opacity:.95}
 #trips{display:flex;gap:6px;padding:8px 10px;background:var(--card);border-bottom:1px solid var(--bd)}
 #trips button{flex:1;min-width:0;border:2px solid var(--ac2);background:transparent;color:var(--ac2);border-radius:12px;padding:8px 6px;font:inherit;font-size:13.5px;font-weight:700;line-height:1.3;cursor:pointer}
 #trips button.on{background:var(--ac2);color:var(--card)}
@@ -71,9 +73,10 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 <header>
  <div class="top">
   <svg class="flag" viewBox="0 0 30 20" aria-label="ธงญี่ปุ่น"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#BC002D"/></svg>
-  <span class="ver" id="verLbl">v2.2 · 3 พ.ย. 2026</span>
+  <span class="ver" id="verLbl">v2.3 · 3 พ.ย. 2026</span>
   <button id="modeBtn" aria-label="สลับโหมดมืด">🌓</button>
  </div>
+ <div class="site">แผนทริปญี่ปุ่น</div>
 <div id="hdr">
  <h1>ญี่ปุ่น 7 วัน 6 คืน: <span>นาโกย่า ·</span> <span>ทาคายามะ ·</span> <span>ชิราคาวะโกะ ·</span> <span>คานาซาวะ</span></h1>
  <p>📅 ศ. 9 – พฤ. 15 เม.ย. 2027 (ออกจากบ้าน พฤ. 8 เม.ย. ค่ำ) · ✈️ TG 644 / TG 645 บินตรง BKK ⇄ NGO</p>
@@ -88,7 +91,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 <script>
 (function(){
 "use strict";
-var VER="v2.2";
+var VER="v2.3";
 var FX=0.214348; // 1 JPY = THB, open.er-api.com 31 ต.ค. 2026 07:02 (เวลาไทย)
 var M=function(q){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);};
 var C='<span class="chk">เช็กก่อนไป</span>';
@@ -485,7 +488,7 @@ function renderTK(){
  '<li>นิกโก้ใจกลางเมือง: ปกติกลาง เม.ย. · คารุอิซาวะ: ปลาย เม.ย.</li>'+
  '<li>พยากรณ์ปี 2027 ออก ~ก.พ. 2027 (japan-guide.com, tenki.jp)</li>'+
  '<li>📅 วันปิดเช็กกับแผนแล้ว: Cup Noodles ปิดอังคาร (เราไปอาทิตย์) · ลานจอดบัสโทโชกูวันธรรมดาเท่านั้น (เราไปจันทร์)</li></ul>'+
- '<details><summary>บันทึกการแก้ไข (changelog)</summary><ul class="mu"><li>v2.2 · 3 พ.ย. 2026 — เพิ่มทริปที่ 2 โตเกียว–ฟูจิ–นิกโก้ (ปุ่มสลับทริปด้านบน จำค่าที่เลือก) · แผนนาโกย่า v2.1 ไม่เปลี่ยน · ตั๋ว NRT ฿33,105 (Google Flights 3 พ.ย. 2026)</li></ul></details></section>';
+ '<details><summary>บันทึกการแก้ไข (changelog)</summary><ul class="mu"><li>v2.3 · 3 พ.ย. 2026 — เปลี่ยนชื่อแอปเป็น "แผนทริปญี่ปุ่น"</li><li>v2.2 · 3 พ.ย. 2026 — เพิ่มทริปที่ 2 โตเกียว–ฟูจิ–นิกโก้ (ปุ่มสลับทริปด้านบน จำค่าที่เลือก) · แผนนาโกย่า v2.1 ไม่เปลี่ยน · ตั๋ว NRT ฿33,105 (Google Flights 3 พ.ย. 2026)</li></ul></details></section>';
  h+='<section id="t-todo"><h2>⚠️ ยังไม่ยืนยัน</h2><ul>'+
  '<li>✈️ เวลาขากลับ 15 เม.ย. · ราคากลุ่ม 18 ที่ · ค่ากระเป๋า</li>'+
  '<li>🏨 ราคาที่พักจริงทั้ง 2 ฐาน (ยังไม่ได้เช็ก) · ห้อง 3 คน</li>'+
@@ -504,7 +507,7 @@ var HDR={tk:'<h1>ญี่ปุ่น 7 วัน 6 คืน: <span>ฟูจ�
  '<p>📅 ศ. 9 – พฤ. 15 เม.ย. 2027 (ออกจากบ้าน พฤ. 8 เม.ย. ค่ำ) · ✈️ การบินไทย BKK 23:50 → NRT 08:10 · ขากลับ รอยืนยัน</p>'+
  '<p>กลุ่ม 18 คน (เด็ก ผู้ใหญ่ ผู้สูงอายุ) · เดินน้อย · ไม่รีบ</p>'+
  '<div class="route">🏨 คาวากุจิโกะ 2 คืน → อุเอโนะ (โตเกียว) 4 คืน · ย้ายโรงแรมครั้งเดียว</div>'};
-var TITLE={ng:document.title,tk:"ทริปญี่ปุ่น โตเกียว–ฟูจิ–นิกโก้–โยโกฮามะ–คาวาโกเอะ (18 คน)"};
+var TITLE={ng:"แผนทริปญี่ปุ่น",tk:"แผนทริปญี่ปุ่น"};
 HDR.ng=document.getElementById("hdr").innerHTML;
 function show(t,keepScroll){
  if(t!=="tk")t="ng";
