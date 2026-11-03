@@ -61,6 +61,9 @@ td.r,th.r{text-align:right;white-space:nowrap}
 .fig.sm{max-width:240px}
 .fig figcaption a{color:var(--mu)}
 .cr li{font-size:12.5px;margin:4px 0}
+#trips{display:flex;gap:6px;padding:8px 10px;background:var(--card);border-bottom:1px solid var(--bd)}
+#trips button{flex:1;min-width:0;border:2px solid var(--ac2);background:transparent;color:var(--ac2);border-radius:12px;padding:8px 6px;font:inherit;font-size:13.5px;font-weight:700;line-height:1.3;cursor:pointer}
+#trips button.on{background:var(--ac2);color:var(--card)}
 footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 </style>
 </head>
@@ -68,21 +71,24 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:16px 10px 40px}
 <header>
  <div class="top">
   <svg class="flag" viewBox="0 0 30 20" aria-label="ธงญี่ปุ่น"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#BC002D"/></svg>
-  <span class="ver" id="verLbl">v2.1 · 31 ต.ค. 2026</span>
+  <span class="ver" id="verLbl">v2.2 · 3 พ.ย. 2026</span>
   <button id="modeBtn" aria-label="สลับโหมดมืด">🌓</button>
  </div>
+<div id="hdr">
  <h1>ญี่ปุ่น 7 วัน 6 คืน: <span>นาโกย่า ·</span> <span>ทาคายามะ ·</span> <span>ชิราคาวะโกะ ·</span> <span>คานาซาวะ</span></h1>
  <p>📅 ศ. 9 – พฤ. 15 เม.ย. 2027 (ออกจากบ้าน พฤ. 8 เม.ย. ค่ำ) · ✈️ TG 644 / TG 645 บินตรง BKK ⇄ NGO</p>
  <p>กลุ่ม 18 คน (เด็ก ผู้ใหญ่ ผู้สูงอายุ) · เดินน้อย · ไม่รีบ</p>
  <div class="route">🏨 นาโกย่า 1 คืน → ทาคายามะ 2 คืน → คานาซาวะ 2 คืน → โรงแรมสนามบิน 1 คืน</div>
+</div>
 </header>
+<div id="trips" role="tablist" aria-label="เลือกทริป"><button type="button" role="tab" data-t="ng">🏯 นาโกย่า–ทาคายามะ–คานาซาวะ</button><button type="button" role="tab" data-t="tk">🗻 โตเกียว–ฟูจิ–นิกโก้</button></div>
 <nav id="nav"></nav>
 <main id="app"></main>
 <footer>ไม่ได้จอง/จ่าย/ติดต่อใคร · ข้อมูลที่ติด <span class="chk">เช็กก่อนไป</span> ยังไม่ยืนยัน<br>อัตราแลกเปลี่ยนและราคาเป็นประมาณการ</footer>
 <script>
 (function(){
 "use strict";
-var VER="v2.1";
+var VER="v2.2";
 var FX=0.214348; // 1 JPY = THB, open.er-api.com 31 ต.ค. 2026 07:02 (เวลาไทย)
 var M=function(q){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);};
 var C='<span class="chk">เช็กก่อนไป</span>';
@@ -324,6 +330,192 @@ function render(){
  observe();
 }
 
+/* ================= TOKYO TRIP (v2.2) ================= */
+var TFX=0.213705; // 1 JPY = THB, open.er-api.com 3 พ.ย. 2026
+var TIMG={
+"tk-chureito":[800,533,"เจดีย์ Chureito + ฟูจิ (ภาพฤดูใบไม้ร่วง)","Wikimedia Commons","https://commons.wikimedia.org/wiki/File:Chureito_Pagoda_and_Mount_Fuji_(44951842365).jpg","Benh LIEU SONG","CC BY-SA 2.0","https://creativecommons.org/licenses/by-sa/2.0"],
+"tk-oshino":[800,563,"บ่อน้ำใส Oshino Hakkai (ภาพฤดูใบไม้ร่วง)","Wikimedia Commons","https://commons.wikimedia.org/wiki/File:Oshino_Hakkai_-_Oshino6874.jpg","lumoplank","CC0","https://creativecommons.org/publicdomain/zero/1.0/"],
+"tk-chinatown":[800,533,"ประตู Zenrin-mon ไชน่าทาวน์โยโกฮามะ","Wikimedia Commons","https://commons.wikimedia.org/wiki/File:Zenrin_Gate_(Yokohama_Chinatown)_20211212-1.jpg","Suicasmo","CC BY-SA 4.0","https://creativecommons.org/licenses/by-sa/4.0"],
+"tk-minatomirai":[800,450,"มินาโตะมิไร 21 โยโกฮามะ","Wikimedia Commons","https://commons.wikimedia.org/wiki/File:20250105_Minato_Mirai_21_(Landmark_Tower,_Queen%27s_Square_Yokohama,_Cosmo_Clock_21)_080219.jpg","Matthide127","CC0","https://creativecommons.org/publicdomain/zero/1.0/"],
+"tk-toshogu":[800,603,"ประตู Yomeimon ศาลเจ้านิกโก้โทโชกู","Wikimedia Commons","https://commons.wikimedia.org/wiki/File:Nikko_Toshogu_Yomeimon_Gate_2024.jpg","Jpatokal","CC BY-SA 4.0","https://creativecommons.org/licenses/by-sa/4.0"],
+"tk-kawagoe":[800,559,"หอระฆัง Toki no Kane คาวาโกเอะ","Wikimedia Commons","https://commons.wikimedia.org/wiki/File:Kawagoe_Toki_no_Kane_1.jpg","Zairon","CC BY-SA 4.0","https://creativecommons.org/licenses/by-sa/4.0"],
+"tk-shibazakura":[800,533,"ชิบะซากุระ ชิจิบุ (เม.ย. 2017)","Wikimedia Commons","https://commons.wikimedia.org/wiki/File:Chichibu%27s_shibazakura,_Saitama_Prefecture;_April_2017_(01).jpg","雷太","CC BY 2.0","https://creativecommons.org/licenses/by/2.0"],
+"tk-karuizawa":[800,536,"ถนน Kyu-Karuizawa Ginza","Wikimedia Commons","https://commons.wikimedia.org/wiki/File:Old_Karuizawa_ginza06n3872.jpg","663highland","CC BY 2.5","https://creativecommons.org/licenses/by/2.5"]
+};
+function TF(k){var i=TIMG[k];if(!i)return "";return '<figure class="fig"><img src="images/'+k+'.webp" width="'+i[0]+'" height="'+i[1]+'" loading="lazy" decoding="async" alt="'+i[2]+'"><figcaption>'+i[2]+' · <a href="'+i[4]+'" target="_blank" rel="noopener">'+i[5]+" / "+i[6]+'</a></figcaption></figure>';}
+var TC='<span class="chk">รอยืนยัน</span>';
+var NP='<span class="chk">ยังไม่ได้เช็กราคา</span>';
+var TDAYS=[
+{id:"t-d1",title:"D1 · ศ. 9 เม.ย. · ถึงนาริตะ → คาวากุจิโกะ (ฟูจิ)",theme:"นั่งรถเหมายาวครั้งเดียว ได้นอนบนรถ · บ่ายเดินเล่นจุดเดียว ทางเรียบ",
+ items:[
+ ["D0","🧳 <b>พฤ. 8 เม.ย. เย็น</b> ออกจากบ้านไป "+P("สุวรรณภูมิ (BKK)","Suvarnabhumi Airport")+" · เช็กอินกลุ่ม ~20:50 (เผื่อ 3 ชม.)","เสื้อกันหนาวใส่กระเป๋าถือ (ฟูจิเช้า/ค่ำหนาว)"],
+ ["23:50","✈️ การบินไทย บินตรง BKK 23:50 → "+P("สนามบินนาริตะ (NRT)","Narita International Airport")+" 08:10 (ศ. 9 เม.ย.)","Google Flights ดู 3 พ.ย. 2026 · ฿33,105/คน ไปกลับ · ยังไม่แสดงค่ากระเป๋า"],
+ ["08:10","🛂 ตม. + รับกระเป๋า ~1–1.5 ชม. (18 คน)",""],
+ ["09:45","🚌 รถเหมา (บัสกลาง 27 ที่นั่ง มีที่เก็บกระเป๋า) รับที่สนามบิน → คาวากุจิโกะ ~2.5–3 ชม. แวะจุดพักรถ","เวลาเดินทางเป็นค่าประมาณ ยังไม่ได้เช็กเส้นทางจริง "+TC],
+ ["13:00","🍲 ข้าวเที่ยง: โฮโต (บะหมี่หม้อไฟ อาหารท้องถิ่น) ย่านคาวากุจิโกะ · ร้านกลุ่ม "+TC,""],
+ ["14:15","🌸 "+P("Oishi Park (สวนริมทะเลสาบ วิวฟูจิ)","Oishi Park Fujikawaguchiko")+" ทางเรียบ เปิดตลอด ฟรี · ลานจอดฟรี บัสใหญ่จอดได้ · "+P("Kawaguchiko Shizen Seikatsukan","Kawaguchiko Natural Living Center")+" 9:00–18:00 ไม่มีวันหยุด","ที่มา: town.fujikawaguchiko.lg.jp"],
+ ["16:00","♨️ เช็กอินเรียวกัง/โรงแรมริมทะเลสาบ อาบออนเซ็น มื้อเย็นที่พัก",""]],
+ care:"👴 เดินน้อย นั่งรถยาวช่วงเดียว · 🧒 นอนบนรถได้ · 🧳 กระเป๋าอยู่ใต้ท้องรถ ไม่ต้องลากขึ้นรถไฟ",
+ backup:["ถ้าเครื่องดีเลย์/เหนื่อย: ข้าม Oishi Park เข้าที่พักเลย (Oishi Park ไปพรุ่งนี้ได้)"]},
+{id:"t-d2",title:"D2 · ส. 10 เม.ย. · วันฟูจิ + ซากุระ",theme:"ออกเช้ามาก หลบคิว · บ่ายกลับพักที่โรงแรม",
+ items:[
+ ["07:30","⛩️🌸 "+P("Arakurayama Sengen Park (เจดีย์ Chureito)","Arakurayama Sengen Park")+" · ซากุระ ~650 ต้น ปกติบาน ต้น–กลาง เม.ย.","⚠️ ขึ้นจุดชมวิว: บันได 398 ขั้น หรือทางลาดคดเคี้ยว ~15–20 นาที → ผู้สูงอายุรอที่ศาลเจ้าด้านล่าง · ปี 2026 ยกเลิกเทศกาลเพราะคนล้น มีควบคุมการจราจร 1–19 เม.ย. และจุดชมวิวใช้ระบบรอบเวลา รอ 1–3 ชม. · ปี 2027 "+TC,"tk-chureito"],
+ ["10:30","💧 "+P("Oshino Hakkai","Oshino Hakkai")+" หมู่บ้านบ่อน้ำใส ทางเรียบ (เสาร์คนเยอะ)","เวลาเปิด/ค่าเข้าบางบ่อ "+TC,"tk-oshino"],
+ ["12:00","🍱 ข้าวเที่ยงย่าน Oshino / Fujiyoshida (อุด้งโยชิดะ) "+TC,""],
+ ["13:30","🛏️ กลับที่พัก พัก 1–2 ชม.",""],
+ ["15:30","🚡 ทางเลือก: "+P("กระเช้า Kachi Kachi Yama","Mt. Fuji Panoramic Ropeway")+" หรือล่องเรือทะเลสาบ (เวลา/ราคา "+TC+")","หรือเดินริมทะเลสาบ/ช้อปของฝากแถวสถานี Kawaguchiko"]],
+ care:"👴 จุดเดียวที่ต้องขึ้นบันไดคือ Chureito (ไม่บังคับ) · 🚻 ห้องน้ำที่ Oshino/ลานจอด · วันเสาร์ช่วงซากุระคนเยอะมาก",
+ backup:["ถ้าฟ้าปิดไม่เห็นฟูจิ: Oishi Park + พิพิธภัณฑ์ในร่มรอบทะเลสาบ "+TC]},
+{id:"t-d3",title:"D3 · อา. 11 เม.ย. · คาวากุจิโกะ → โยโกฮามะ → อุเอโนะ (ย้ายโรงแรมครั้งเดียว)",theme:"รถเหมาขนกระเป๋าให้ทั้งวัน · โยโกฮามะ ทางเรียบ",
+ items:[
+ ["09:30","🚌 เช็กเอาต์ รถเหมา → โยโกฮามะ ~1.5–2 ชม. (ประมาณ)",""],
+ ["11:30","🥟 "+P("ไชน่าทาวน์โยโกฮามะ","Yokohama Chinatown")+" ข้าวเที่ยง (ร้านใหญ่ที่รับกลุ่ม "+TC+")","วันอาทิตย์คนเยอะ","tk-chinatown"],
+ ["13:30","🍜 "+P("Cup Noodles Museum Yokohama","Cup Noodles Museum Yokohama")+" 10:00–18:00 (เข้าสุดท้าย 17:00) ปิดวันอังคาร → อาทิตย์เปิด · ผู้ใหญ่ ¥500 · ม.ปลายลงไปฟรี · My CUPNOODLES Factory ต้องรับบัตรคิว","ที่มา: cupnoodles-museum.jp"],
+ ["15:00","🌉 "+P("มินาโตะมิไร 21","Minato Mirai 21 Yokohama")+" นั่งเล่นริมน้ำ / ห้าง (ทางเรียบ)","","tk-minatomirai"],
+ ["16:30","🚌 รถเหมา → โรงแรมย่านอุเอโนะ ~45–60 นาที (ประมาณ) · เช็กอิน 4 คืน",""]],
+ care:"👴 ทั้งวันทางเรียบ มีม้านั่ง · 🧳 กระเป๋าอยู่บนรถตลอด ไม่ต้องฝาก",
+ backup:["ฝนตก: อยู่ในร่ม Cup Noodles Museum + ห้างมินาโตะมิไร"]},
+{id:"t-d4",title:"D4 · จ. 12 เม.ย. · ไปกลับนิกโก้",theme:"วันธรรมดา (สำคัญ: ลานจอดบัสโทโชกูจองได้เฉพาะวันธรรมดา)",
+ items:[
+ ["08:00","🚌 แผน A: รถเหมาจากโรงแรม → นิกโก้ ~2–2.5 ชม. (ประมาณ)","🚆 แผน B: Tobu SPACIA X จาก Asakusa ~1 ชม.50 (ตารางปัจจุบัน 9:00 → 10:50 · ปี 2027 "+TC+") · Ueno → Asakusa แท็กซี่ใกล้ ๆ"],
+ ["10:30","⛩️ "+P("Nikko Toshogu","Nikko Toshogu")+" เม.ย.–ต.ค. 9:00–17:00 (เข้าสุดท้าย 16:30) · ผู้ใหญ่ ¥1,600 · เด็ก ¥550","⚠️ บันไดหลายช่วง · วีลแชร์ไปได้ถึงหน้าบันไดก่อนประตู Yomeimon · ทางขึ้นสุสาน Okumiya เป็นบันไดยาว → ผู้สูงอายุข้ามได้ · บัสใหญ่/ไมโครบัสต้องจองลานจอดล่วงหน้า 7 วัน ไม่รับ ส./อา./วันหยุด","tk-toshogu"],
+ ["12:30","🍱 ข้าวเที่ยง ยูบะ (ฟองเต้าหู้ อาหารขึ้นชื่อนิกโก้) "+TC,""],
+ ["13:45","🌉 "+P("สะพาน Shinkyo","Shinkyo Bridge Nikko")+" ดูจากริมถนน (ไม่ต้องเดินข้าม) · 🌸 ซากุระใจกลางนิกโก้ปกติบานกลาง เม.ย.","ที่มา: visitnikko.jp"],
+ ["15:00","🚌 กลับโตเกียว ถึงโรงแรม ~17:30 · มื้อเย็นใกล้ Ueno",""]],
+ care:"👴 วันนี้เดินมากสุดของทริป (ทางกรวด+บันได) ให้นั่งพักบ่อย ๆ · 🧒 เด็กชอบลิงสามตัว (ปิดตา ปิดหู ปิดปาก)",
+ backup:["ถ้าจองลานจอดบัสไม่ได้ → ใช้แผน B รถไฟ SPACIA X + แท็กซี่ที่นิกโก้"]},
+{id:"t-d5",title:"D5 · อ. 13 เม.ย. · คาวาโกเอะ (ไซตามะ) ครึ่งวัน",theme:"เมืองโกดังเก่า 'โคเอโดะ' ใกล้โตเกียว · บ่ายพัก",
+ items:[
+ ["09:30","🚌 รถเหมา → คาวาโกเอะ ~1 ชม. (ประมาณ)","🚆 หรือ Tobu Tojo จาก Ikebukuro ~30 นาที (เร็วสุด 26 นาที) · ที่มา: city.kawagoe.saitama.jp"],
+ ["10:30","🏮 "+P("ถนน Kurazukuri (Ichibangai)","Kawagoe Ichibangai")+" + "+P("หอระฆัง Toki no Kane","Toki no Kane Kawagoe")+" ทางเรียบ","⚠️ พิพิธภัณฑ์ Kurazukuri Shiryokan ปิดซ่อมเสริมแรงแผ่นดินไหว · ตัวอาคารหน้าร้านมีแผนเปิดปีงบ 2027 (ยังไม่ชัดว่าทัน เม.ย.) "+TC,"tk-kawagoe"],
+ ["11:30","🍬 "+P("ซอยขนม Kashiya Yokocho","Kashiya Yokocho Kawagoe")+" ขนมโบราณ มันหวาน",""],
+ ["12:30","🍱 ข้าวเที่ยง ปลาไหล (อุนางิ) ร้านขึ้นชื่อคาวาโกเอะ · ร้านกลุ่ม "+TC,""],
+ ["14:00","🛏️ กลับโรงแรมพัก / ช้อป Ameyoko ข้างสถานีอุเอโนะ",""]],
+ care:"👴 ทางเรียบ ครึ่งวัน · คาวาโกเอะวันธรรมดาคนน้อยกว่าเสาร์-อาทิตย์",
+ backup:["⭐ ทางเลือก (ถ้ากลุ่มยังไหว): ต่อไปชิจิบุดูชิบะซากุระ ดูหัวข้อ 'แบบเที่ยวครบ'"]},
+{id:"t-d6",title:"D6 · พ. 14 เม.ย. · วันอิสระโตเกียว (หรือคารุอิซาวะ)",theme:"วันพัก ไม่ต้องนั่งรถไกล ใครอยากไปเพิ่มค่อยแยกกลุ่ม",
+ items:[
+ ["10:00","🏯 "+P("Senso-ji อาซากุสะ","Senso-ji Asakusa")+" (แท็กซี่จาก Ueno) · หรือ "+P("สวน Ueno","Ueno Park")+" / สวนสัตว์ Ueno "+TC,""],
+ ["13:00","🛍️ ช้อป/พักที่โรงแรม · เด็กเลือกที่เล่น (เช่น Tokyo Skytree "+TC+")",""],
+ ["","🚄 ทางเลือกกลุ่มย่อย: คารุอิซาวะ (Hokuriku Shinkansen 'Asama' จาก Tokyo/Ueno ~1 ชม.04–1 ชม.18 · ที่นั่งจอง ¥6,130 เที่ยวเดียว · 'Kagayaki' ไม่จอด) → "+P("Karuizawa Prince Shopping Plaza","Karuizawa Prince Shopping Plaza")+" ติดสถานี 10:00–20:00 "+TC,"🌸 ซากุระคารุอิซาวะปกติเริ่มปลาย เม.ย. → 14 เม.ย. น่าจะยังไม่บาน","tk-karuizawa"]],
+ care:"👴 ผู้สูงอายุพักผ่อนได้เต็มวัน · ก่อนวันบิน",
+ backup:[]},
+{id:"t-d7",title:"D7 · พฤ. 15 เม.ย. · กลับบ้าน",theme:"เวลาบินขากลับ รอยืนยัน",
+ items:[
+ ["","🚆 "+P("Keisei Ueno","Keisei Ueno Station")+" → นาริตะ ด้วย Skyliner ~41 นาที · ¥2,580/ผู้ใหญ่ (ที่มา: keisei.co.jp) · หรือรถเหมาไปส่ง (กระเป๋าเยอะ สะดวกกว่า "+TC+")",""],
+ ["","✈️ การบินไทย NRT → BKK · เวลา "+TC+" · ไปถึงสนามบินก่อน 3 ชม.",""]],
+ care:"🧳 ถ้าบินเช้า: เดินทางเช้ามาก · ถ้าบินบ่าย/เย็น: ฝากกระเป๋าโรงแรม เดินเล่นครึ่งเช้า",
+ backup:[]}
+];
+function budgetTK(){
+ var kw=2*20000,ue=4*12000,hot=kw+ue; // สมมติฐาน ยังไม่ได้เช็กราคา
+ var chDay=175000,ch=Math.round(5*chDay/18);
+ var loc=2580+2500,food=30000,ent=5000;
+ var j=hot+ch+loc+food+ent,fl=33105;
+ var land=j*TFX,sub=land+fl,buf=sub*0.1;
+ var extra=12260+500+1500; // แบบเที่ยวครบ: ชินคันเซ็นคารุอิซาวะไปกลับ + ชิบะซากุระ + รถเหมาชั่วโมงเกิน
+ return {kw:kw,ue:ue,hot:hot,chDay:chDay,ch:ch,loc:loc,food:food,ent:ent,j:j,fl:fl,buf:buf,tot:sub+buf,all:(sub+extra*TFX)*1.1};
+}
+function renderTK(){
+ var b=budgetTK(),h="";
+ var nav=[["t-verdict","✅ สรุป"],["t-book","🎟️ ต้องจอง"],["t-budget","💰 งบ"],["t-flights","✈️ เที่ยวบิน"],["t-hotels","🏨 ที่พัก"]];
+ TDAYS.forEach(function(d){nav.push([d.id,d.id.slice(2).toUpperCase()]);});
+ nav.push(["t-all","🗺️ เที่ยวครบ 5"],["t-notes","🌸 ฤดูกาล"],["t-todo","⚠️ รอยืนยัน"],["t-src","🔗 ที่มา"]);
+ document.getElementById("nav").innerHTML=nav.map(function(x){return '<a href="#'+x[0]+'">'+x[1]+'</a>';}).join("");
+ var R=function(a,c){return '<tr><td>'+a+'</td><td class="r">'+c+'</td></tr>';};
+ h+='<section id="t-verdict"><h2>✅ สรุป: ไปครบ 5 ที่ไหวไหม?</h2>'+
+ '<p><b>ไม่สบายนักสำหรับกลุ่ม 18 คนที่มีผู้สูงอายุ</b> · แผนแนะนำไป 4 ที่: <b>ฟูจิ · โยโกฮามะ · นิกโก้ · คาวาโกเอะ (ไซตามะ)</b> มีวันพัก 1 วัน · <b>คารุอิซาวะ</b> และ <b>ชิจิบุ</b> เป็นทางเลือก</p>'+
+ '<ul><li>🏨 2 ฐาน ย้ายโรงแรมครั้งเดียว: คาวากุจิโกะ 2 คืน → อุเอโนะ (โตเกียว) 4 คืน</li>'+
+ '<li>💰 งบประมาณ ~<b>'+thb(b.tot)+'</b>/คน (ประมาณการ รวมตั๋ว ฿33,105 + เผื่อ 10%) · แพงกว่านาโกย่า (฿64,000–68,000) ~฿10,000</li>'+
+ '<li>🌸 ไปฟูจิก่อน (9–10 เม.ย.) เพราะซากุระฟูจิปกติบานช่วงนี้ · โตเกียว/โยโกฮามะปกติบานปลาย มี.ค.–ต้น เม.ย. → อาจร่วงแล้ว</li></ul></section>';
+ h+='<section id="t-book"><h2>🎟️ ต้องจองล่วงหน้า</h2><ul>'+
+ '<li><b>ตั๋วการบินไทย 18 ที่</b> BKK 23:50 → NRT 08:10 (ออกคืน 8 เม.ย.) · ขากลับ 15 เม.ย. เวลา '+TC+' · ขอราคากลุ่ม · ขากลับตรงสงกรานต์</li>'+
+ '<li><b>ที่พักคาวากุจิโกะ ศ.–ส. 9–10 เม.ย.</b> ช่วงซากุระ+วันหยุด เต็มเร็วที่สุด → จองก่อน (เลือกแบบยกเลิกฟรี)</li>'+
+ '<li><b>ที่พักอุเอโนะ 4 คืน</b> 11–14 เม.ย. (~6 ห้อง × 3 คน)</li>'+
+ '<li><b>รถเหมาบัสกลาง 27 ที่นั่ง</b> (มีที่เก็บกระเป๋า · ไมโครบัส 20 ที่ไม่มีที่เก็บกระเป๋า) 5 วัน 9–13 เม.ย. · ขอใบเสนอราคา 2–3 เจ้า (ทะเบียนเขียว) · คนขับค้าง 2 คืนที่คาวากุจิโกะ</li>'+
+ '<li><b>ลานจอดบัสนิกโก้โทโชกู</b> จองล่วงหน้า 7 วัน · ไม่รับ ส./อา./วันหยุด → เราไป จ. 12 เม.ย.</li>'+
+ '<li><b>Skyliner</b> 15 เม.ย. (จองออนไลน์ได้) หรือรวมในรถเหมา</li>'+
+ '<li>ร้านอาหารกลุ่ม: โฮโต (D1), ไชน่าทาวน์ (D3), อุนางิคาวาโกเอะ (D5)</li></ul></section>';
+ h+='<section id="t-budget"><h2>💰 งบต่อคน (ประมาณการ)</h2><div class="tw"><table>'+
+ '<tr><th>รายการ</th><th class="r">ต่อคน</th></tr>'+
+ R("✈️ ตั๋วการบินไทย ไปกลับ","฿33,105")+
+ R("🏨 ที่พัก 6 คืน (สมมติฐาน "+NP+")<br><span class=\"mu\">คาวากุจิโกะ 2 × ¥20,000 รวมอาหารเย็น+เช้า · อุเอโนะ 4 × ¥12,000</span>",yen(b.hot))+
+ R("🚌 รถเหมา 5 วัน (¥"+(b.chDay/1000)+"k/วัน ÷ 18)",yen(b.ch))+
+ R("🚆 Skyliner + แท็กซี่/รถไฟในโตเกียว",yen(b.loc))+
+ R("🍱 อาหาร",yen(b.food))+
+ R("🎟️ ค่าเข้า (โทโชกู ¥1,600 · Cup Noodles ¥500 · กระเช้า/เรือ)",yen(b.ent))+
+ R("รวมในญี่ปุ่น (1 เยน = ฿"+TFX+")",thb(b.j*TFX))+
+ R("เผื่อ 10%",thb(b.buf))+
+ '<tr><th>รวม/คน</th><th class="r big">'+thb(b.tot)+'</th></tr></table></div>'+
+ '<p class="mu">รถเหมา: bus-trip.jp (อัปเดต 26 ต.ค. 2026) บัสกลาง 27 ที่ 9 ชม./250 กม. วันธรรมดา ¥114,697–143,371 · ฤดูใบไม้ผลิเป็นช่วงแพง · ส.–อา. +20–30% · ไม่รวมทางด่วน ลานจอด ที่พักคนขับ → ใช้ ¥175,000/วัน (ประมาณการ) · ที่พักยังไม่ได้เช็กราคาจริง</p>'+
+ '<div class="box">🆚 <b>เทียบนาโกย่า</b>: นาโกย่า ฿64,000–68,000 (ตั๋ว ฿30,080) · โตเกียว ~'+thb(b.tot)+' (ตั๋ว ฿33,105 แพงกว่า ~฿3,000 · ที่พักโตเกียว/ฟูจิแพงกว่า · รถเหมาวันเสาร์-อาทิตย์) · แบบเที่ยวครบ 5 ที่ ~'+thb(b.all)+'</div></section>';
+ h+='<section id="t-flights"><h2>✈️ เที่ยวบิน (ยังไม่จอง)</h2><ul>'+
+ '<li><b>สมมติฐาน</b> การบินไทย บินตรง BKK 23:50 → NRT 08:10 (ออกคืน พฤ. 8 → ถึง ศ. 9 เม.ย.) · ไปกลับ <b>฿33,105</b></li>'+
+ '<li>ทางเลือก: BKK 22:10 → NRT 06:20 ราคาเท่ากัน · ไป Haneda 13:00 → 21:10 ฿31,445 หรือ 22:45 → 06:55 ฿35,005</li>'+
+ '<li><b>ขากลับ พฤ. 15 เม.ย.</b> เวลา '+TC+'</li></ul>'+
+ '<p class="mu">Google Flights ดู 3 พ.ย. 2026 · 1 ผู้ใหญ่ ไปกลับ ชั้นประหยัด · ยังไม่แสดงค่ากระเป๋า · ราคากลุ่ม 18 ที่ '+TC+'</p></section>';
+ h+='<section id="t-hotels"><h2>🏨 ที่พัก 2 ฐาน</h2><p class="mu">ราคา '+NP+' ทุกแห่ง · 18 คน ≈ 6 ห้อง × 3 คน หรือห้องญี่ปุ่น</p>'+
+ '<h3>ฐาน 1: คาวากุจิโกะ (2 คืน: 9–10 เม.ย.)</h3><ul>'+
+ '<li>'+P("Fuji View Hotel","Fuji View Hotel Fujikawaguchiko")+' · <a href="https://www.fujiview.jp/" target="_blank" rel="noopener">เว็บทางการ</a> · '+NP+'</li>'+
+ '<li>'+P("Kozantei Ubuya (เรียวกังริมทะเลสาบ)","Kozantei Ubuya")+' · <a href="https://www.ubuya.co.jp/" target="_blank" rel="noopener">เว็บทางการ</a> · '+NP+'</li></ul>'+
+ '<h3>ฐาน 2: อุเอโนะ โตเกียว (4 คืน: 11–14 เม.ย.)</h3><p class="mu">ทำไมอุเอโนะ: Skyliner ไปนาริตะ ~41 นาที · ใกล้ Asakusa (รถไฟไปนิกโก้) · ชินคันเซ็นไปคารุอิซาวะจอดที่ Ueno</p><ul>'+
+ '<li>'+P("Mitsui Garden Hotel Ueno","Mitsui Garden Hotel Ueno")+' · <a href="https://www.gardenhotels.co.jp/ueno/" target="_blank" rel="noopener">เว็บทางการ</a> · '+NP+'</li>'+
+ '<li>ทางเลือก ถ้าบิน Haneda: '+P("Shinagawa Prince Hotel","Shinagawa Prince Hotel")+' · <a href="https://www.princehotels.co.jp/shinagawa/" target="_blank" rel="noopener">เว็บทางการ</a> · '+NP+'</li></ul></section>';
+ TDAYS.forEach(function(d){
+  h+='<section id="'+d.id+'"><h2>'+d.title+'</h2><div class="mu">'+d.theme+'</div><ul class="tl">'+
+  d.items.map(function(it){var ex=it.slice(2),im=null,l=ex[ex.length-1];if(ex.length&&TIMG[l]){im=l;ex=ex.slice(0,-1);}
+  return '<li><span class="t">'+it[0]+'</span><span>'+it[1]+ex.filter(Boolean).map(function(n){return '<div class="n">'+n+'</div>';}).join("")+(im?TF(im):"")+'</span></li>';}).join("")+
+  '</ul><div class="mu" style="margin-top:4px">'+d.care+'</div>';
+  if(d.backup.length){h+='<details><summary>แผนสำรอง/ทางเลือก</summary><ul>'+d.backup.map(function(x){return '<li>'+x+'</li>';}).join("")+'</ul></details>';}
+  h+='</section>';
+ });
+ h+='<section id="t-all"><h2>🗺️ แบบเที่ยวครบ 5 ที่ (ทางเลือก)</h2><details><summary>ดูแผน + ข้อแลกเปลี่ยน</summary>'+
+ '<div class="tw"><table><tr><th>วัน</th><th>แผน</th></tr>'+
+ '<tr><td>D1–D4</td><td>เหมือนแผนแนะนำ (ฟูจิ 2 วัน → โยโกฮามะ → นิกโก้)</td></tr>'+
+ '<tr><td>D5 อ. 13</td><td>รถเหมา: คาวาโกเอะเช้า → '+P("ชิจิบุ Hitsujiyama Park (ชิบะซากุระ)","Hitsujiyama Park Chichibu")+' (คาวาโกเอะ → ชิจิบุ ~1.5 ชม. ประมาณ) → กลับโตเกียว · วันยาว ~10 ชม.</td></tr>'+
+ '<tr><td>D6 พ. 14</td><td>ไปกลับคารุอิซาวะ ชินคันเซ็น Asama ~1 ชม.10 · เอาต์เล็ตติดสถานี · Kyu-Karuizawa Ginza</td></tr>'+
+ '<tr><td>D7 พฤ. 15</td><td>บินกลับ</td></tr></table></div>'+TF("tk-shibazakura")+
+ '<ul><li>⚠️ เที่ยวไกล 4 วันติด (D3–D6) ไม่มีวันพัก ผู้สูงอายุ/เด็กเหนื่อย</li>'+
+ '<li>🌸 ชิบะซากุระปกติบานกลาง เม.ย.–ต้น พ.ค. · ปี 2026 (บานเร็ว ~1 สัปดาห์) เทศกาล 3 เม.ย.–6 พ.ค. 8:00–17:00 · เก็บค่าเข้าตั้งแต่ 10 เม.ย. ผู้ใหญ่ ¥500 ม.ต้นลงไปฟรี · บานเต็มทั้งสวน ~16 เม.ย. → ปีปกติ 13 เม.ย. อาจบานแค่บางส่วน</li>'+
+ '<li>🌸 คารุอิซาวะซากุระปกติปลาย เม.ย. → ไปแล้วไม่เจอซากุระ เหลือช้อปปิ้ง</li>'+
+ '<li>💰 เพิ่ม ~'+thb(b.all-b.tot)+'/คน (ชินคันเซ็นไปกลับ ¥12,260 + ค่าเข้า + รถเหมาชั่วโมงเกิน) → รวม ~'+thb(b.all)+'</li></ul></details></section>';
+ h+='<section id="t-notes"><h2>🌸 ซากุระ (ช่วงปกติ ไม่ใช่พยากรณ์)</h2><ul>'+
+ '<li>โตเกียว: ปี 2026 ชมสวยสุด 28 มี.ค.–4 เม.ย. · โยโกฮามะ 29 มี.ค.–5 เม.ย. → 9–15 เม.ย. อาจร่วงแล้ว</li>'+
+ '<li>ฟูจิ 5 ทะเลสาบ: ปี 2026 6–12 เม.ย. → ตรงกับ D1–D2 พอดี</li>'+
+ '<li>นิกโก้ใจกลางเมือง: ปกติกลาง เม.ย. · คารุอิซาวะ: ปลาย เม.ย.</li>'+
+ '<li>พยากรณ์ปี 2027 ออก ~ก.พ. 2027 (japan-guide.com, tenki.jp)</li>'+
+ '<li>📅 วันปิดเช็กกับแผนแล้ว: Cup Noodles ปิดอังคาร (เราไปอาทิตย์) · ลานจอดบัสโทโชกูวันธรรมดาเท่านั้น (เราไปจันทร์)</li></ul>'+
+ '<details><summary>บันทึกการแก้ไข (changelog)</summary><ul class="mu"><li>v2.2 · 3 พ.ย. 2026 — เพิ่มทริปที่ 2 โตเกียว–ฟูจิ–นิกโก้ (ปุ่มสลับทริปด้านบน จำค่าที่เลือก) · แผนนาโกย่า v2.1 ไม่เปลี่ยน · ตั๋ว NRT ฿33,105 (Google Flights 3 พ.ย. 2026)</li></ul></details></section>';
+ h+='<section id="t-todo"><h2>⚠️ ยังไม่ยืนยัน</h2><ul>'+
+ '<li>✈️ เวลาขากลับ 15 เม.ย. · ราคากลุ่ม 18 ที่ · ค่ากระเป๋า</li>'+
+ '<li>🏨 ราคาที่พักจริงทั้ง 2 ฐาน (ยังไม่ได้เช็ก) · ห้อง 3 คน</li>'+
+ '<li>🚌 ใบเสนอราคารถเหมาจริง · เวลาเดินทางจริง (เวลาบนรถในแผนเป็นค่าประมาณ)</li>'+
+ '<li>⛩️ ระบบรอบเวลา/การจราจร Chureito ปี 2027 · พิพิธภัณฑ์ Kurazukuri คาวาโกเอะเปิดหรือยัง</li>'+
+ '<li>🚆 ตาราง SPACIA X / Asama ปี 2027 · เวลาเปิดกระเช้าคาวากุจิโกะ · ร้านอาหารกลุ่ม</li></ul></section>';
+ h+='<section id="t-src"><h2>🔗 ที่มา (เช็ก 1–3 พ.ย. 2026)</h2><ul class="cr">'+
+ ["https://www.japan-guide.com/sakura/","https://www.yamanashi-kankou.jp/special/arakurayama_sakura.html","https://www.fujiyoshida.net/feature/index.php?p=sakura","https://www.town.fujikawaguchiko.lg.jp/info/info.php?if_id=2346","https://bus.fujikyu.co.jp/highway/fujisan/shinjuku/","https://www.cupnoodles-museum.jp/en/yokohama/","https://www.toshogu.jp/pages/25/","https://www.tochigiji.or.jp/spot/s6154/","https://www.visitnikko.jp/en/plan-your-trip/faqs/","https://www.tobu.co.jp/spaciax/guide/","https://www.city.kawagoe.saitama.jp/kanko/k-about/1011682.html","https://navi.city.chichibu.lg.jp/p_flower/1808/","https://www.chichibuji.gr.jp/shiba2026/","https://visitkaruizawa.com/en/things/seasons/spring/","https://www.karuizawa-psp.jp/time","https://sanpo.travel/ja/karuizawa/guide/getting-there-from-tokyo","https://www.keisei.co.jp/keisei/tetudou/skyliner/us/traffic/skyliner_fares.php","https://bus-trip.jp/agent/tokyo/","https://open.er-api.com/v6/latest/JPY"].map(function(u){return '<li><a href="'+u+'" target="_blank" rel="noopener">'+u.replace(/^https?:\/\/(www\.)?/,"")+'</a></li>';}).join("")+
+ '</ul><details><summary>เครดิตรูปภาพ ('+Object.keys(TIMG).length+' รูป)</summary><ul class="cr">'+
+ Object.keys(TIMG).map(function(k){var i=TIMG[k];return '<li><b>'+i[2]+'</b> — <a href="'+i[4]+'" target="_blank" rel="noopener">Wikimedia Commons</a> · '+i[5]+' · <a href="'+i[7]+'" target="_blank" rel="noopener">'+i[6]+'</a></li>';}).join("")+
+ '</ul><p class="mu">ย่อขนาดเป็น webp ไม่ได้แก้เนื้อหาภาพ · บางภาพไม่ใช่ฤดูใบไม้ผลิ (ระบุในคำบรรยาย) · ไม่มีรูป Oishi Park (ไม่พบรูปที่ยืนยันได้)</p></details></section>';
+ document.getElementById("app").innerHTML=h;
+ observe();
+}
+var HDR={tk:'<h1>ญี่ปุ่น 7 วัน 6 คืน: <span>ฟูจิ ·</span> <span>โยโกฮามะ ·</span> <span>นิกโก้ ·</span> <span>คาวาโกเอะ</span></h1>'+
+ '<p>📅 ศ. 9 – พฤ. 15 เม.ย. 2027 (ออกจากบ้าน พฤ. 8 เม.ย. ค่ำ) · ✈️ การบินไทย BKK 23:50 → NRT 08:10 · ขากลับ รอยืนยัน</p>'+
+ '<p>กลุ่ม 18 คน (เด็ก ผู้ใหญ่ ผู้สูงอายุ) · เดินน้อย · ไม่รีบ</p>'+
+ '<div class="route">🏨 คาวากุจิโกะ 2 คืน → อุเอโนะ (โตเกียว) 4 คืน · ย้ายโรงแรมครั้งเดียว</div>'};
+var TITLE={ng:document.title,tk:"ทริปญี่ปุ่น โตเกียว–ฟูจิ–นิกโก้–โยโกฮามะ–คาวาโกเอะ (18 คน)"};
+HDR.ng=document.getElementById("hdr").innerHTML;
+function show(t,keepScroll){
+ if(t!=="tk")t="ng";
+ document.querySelectorAll("#trips button").forEach(function(x){var on=x.getAttribute("data-t")===t;x.classList.toggle("on",on);x.setAttribute("aria-selected",on?"true":"false");});
+ document.getElementById("hdr").innerHTML=HDR[t];document.title=TITLE[t];
+ if(t==="tk")renderTK();else render();
+ try{localStorage.setItem("trip",t);}catch(e){}
+ if(!keepScroll)window.scrollTo(0,0);
+}
+document.querySelectorAll("#trips button").forEach(function(x){x.onclick=function(){if(location.hash)history.replaceState(null,"",location.pathname);show(x.getAttribute("data-t"));};});
+
 var io;
 function observe(){
  if(io)io.disconnect();
@@ -339,7 +531,9 @@ var saved=null;try{saved=localStorage.getItem("mode");}catch(e){}
 applyMode(saved);
 mb.onclick=function(){var dark=document.documentElement.classList.contains("dark")||(!document.documentElement.classList.contains("light")&&matchMedia("(prefers-color-scheme: dark)").matches);var m=dark?"light":"dark";applyMode(m);try{localStorage.setItem("mode",m);}catch(e){}};
 
-render();
+var t0=null;try{t0=localStorage.getItem("trip");}catch(e){}
+if(/^#t-/.test(location.hash))t0="tk";
+show(t0,true);
 if(/^#v\d$/.test(location.hash)){history.replaceState(null,"",location.pathname);}
 if("serviceWorker" in navigator&&location.protocol!=="file:"){navigator.serviceWorker.register("sw.js").catch(function(){});}
 })();

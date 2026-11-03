@@ -1,6 +1,8 @@
-# ทริปญี่ปุ่น นาโกย่า · ทาคายามะ · ชิราคาวะโกะ · คานาซาวะ (กลุ่ม 18 คน)
+# ทริปญี่ปุ่น กลุ่ม 18 คน: 2 ทริปให้เลือก (นาโกย่า–ทาคายามะ–คานาซาวะ / โตเกียว–ฟูจิ–นิกโก้)
 
-เวอร์ชัน v2.1 (31 ต.ค. 2026) · ทริป 7 วัน 6 คืน ศ. 9 – พฤ. 15 เม.ย. 2027 บินการบินไทย TG 644 (BKK 00:05→NGO 08:00 ออกจากบ้าน 8 เม.ย. ค่ำ) / TG 645 (NGO 11:00→BKK 15:00) · ตั๋ว ฿30,080/คน (Google Flights 31 ต.ค. 2026) · เมื่อแก้ไฟล์ ให้เปลี่ยน CACHE ใน sw.js ทุกครั้ง
+เวอร์ชัน v2.2 (3 พ.ย. 2026) · มีปุ่มสลับทริปด้านบน (จำค่าที่เลือกใน localStorage `trip`) · **ทริปโตเกียว** (ข้อมูล `TDAYS`, `TIMG`, `budgetTK()`, `renderTK()`): คาวากุจิโกะ 2 คืน → อุเอโนะ 4 คืน · ตั๋วการบินไทย BKK 23:50→NRT 08:10 ฿33,105/คน (Google Flights 3 พ.ย. 2026) ขากลับรอยืนยัน · รูปโตเกียว `images/tk-*.webp`
+
+**ทริปนาโกย่า** (v2.1 ไม่เปลี่ยนเนื้อหา): ทริป 7 วัน 6 คืน ศ. 9 – พฤ. 15 เม.ย. 2027 บินการบินไทย TG 644 (BKK 00:05→NGO 08:00 ออกจากบ้าน 8 เม.ย. ค่ำ) / TG 645 (NGO 11:00→BKK 15:00) · ตั๋ว ฿30,080/คน (Google Flights 31 ต.ค. 2026) · เมื่อแก้ไฟล์ ให้เปลี่ยน CACHE ใน sw.js ทุกครั้ง
 
 เว็บแอปดูแผนบนมือถือ แผนเดียว **7 วัน 6 คืน** (แผน A รถเหมา / แผน B รถไฟ+บัส+ส่งกระเป๋า)
 ใช้ออฟไลน์ได้ และ "เพิ่มลงหน้าจอโฮม" ได้
@@ -34,7 +36,7 @@ git push -u origin main
 ลิงก์จะเป็น `https://<ชื่อบัญชี>.github.io/japan-nagoya-group-trip/` ส่งใน LINE กลุ่มได้เลย
 
 ## แก้แผน
-แก้ข้อมูลใน `index.html` (ตัวแปร `DAYS`, `NIGHTS`, `HOTEL_PP`, `FLIGHT_THB`, `CHARTER_DAY`, `FX`) แล้ว **เปลี่ยนชื่อ cache ใน `sw.js`** (เช่น `nagoya-trip-v2.1`) · เพิ่มรูปใหม่ต้องใส่ใน `IMG` และรายการ ASSETS ใน `sw.js` และเลขเวอร์ชันในหน้า เพื่อให้มือถือโหลดของใหม่
+แก้ข้อมูลใน `index.html` (ตัวแปร `DAYS`, `NIGHTS`, `HOTEL_PP`, `FLIGHT_THB`, `CHARTER_DAY`, `FX`) แล้ว **เปลี่ยนชื่อ cache ใน `sw.js`** (ตอนนี้ `japan-trip-v2.2`) · เพิ่มรูปใหม่ต้องใส่ใน `IMG` และรายการ ASSETS ใน `sw.js` และเลขเวอร์ชันในหน้า เพื่อให้มือถือโหลดของใหม่
 
 ## ที่มาหลัก
-thaiembassy.jp · osaka.thaiembassy.org · nouhibus.co.jp · hokutetsu.co.jp · touristpass.jp · jr-group.jp · meitetsu.co.jp · kuronekoyamato.co.jp · jinya.gifu.jp · shiro-niwa.pref.ishikawa.lg.jp · shirakawa-go.gr.jp · vill.shirakawa.lg.jp · centrair.jp · houraiken.com · yabaton.com · maruya-honten.com · kanazawa21.jp · tour.ne.jp (ราคาที่พักตามวัน) · Google Flights · ekitan.com · kankou-gifu.jp · esca-sc.com · open.er-api.com (FX)
+thaiembassy.jp · osaka.thaiembassy.org · nouhibus.co.jp · hokutetsu.co.jp · touristpass.jp · jr-group.jp · meitetsu.co.jp · kuronekoyamato.co.jp · jinya.gifu.jp · shiro-niwa.pref.ishikawa.lg.jp · shirakawa-go.gr.jp · vill.shirakawa.lg.jp · centrair.jp · houraiken.com · yabaton.com · maruya-honten.com · kanazawa21.jp · tour.ne.jp (ราคาที่พักตามวัน) · Google Flights · ekitan.com · kankou-gifu.jp · esca-sc.com · open.er-api.com (FX) · ทริปโตเกียว: ดูหัวข้อ "ที่มา" ในหน้า
